@@ -17,6 +17,10 @@ const routes: Routes = [
                 loadChildren: '../timeline/timeline.module#TimelinePageModule'
             },
             {
+                path: 'chat',
+                loadChildren: '../chat/chat.module#ChatPageModule'
+            },
+            {
                 path: '',
                 redirectTo: '/home/tabs/timeline',
                 pathMatch: 'full'

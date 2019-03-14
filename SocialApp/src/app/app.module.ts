@@ -9,6 +9,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {NewPostComponent} from './components/new-post/new-post.component';
+import {Keyboard} from '@ionic-native/keyboard/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 @NgModule({
   declarations: [AppComponent, NewPostComponent],
@@ -17,7 +19,9 @@ import {NewPostComponent} from './components/new-post/new-post.component';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Keyboard,
+      Vibration
   ],
   bootstrap: [AppComponent]
 })

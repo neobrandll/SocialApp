@@ -1,7 +1,8 @@
 {
   "name": "SocialApp",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

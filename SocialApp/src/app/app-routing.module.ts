@@ -11,6 +11,8 @@ const routes: Routes = [
   { path: 'profile', loadChildren: './pages/profile/profile.module#ProfilePageModule', canLoad: [AuthGuard] },
   { path: 'edit-profile', loadChildren: './pages/profile/edit-profile/edit-profile.module#EditProfilePageModule' , canLoad: [AuthGuard]},
   { path: 'timeline', loadChildren: './pages/timeline/timeline.module#TimelinePageModule', canLoad: [AuthGuard] },
+  { path: 'chat', loadChildren: './pages/chat/chat.module#ChatPageModule'},
+  {path: 'home/tabs/chat/single-chat', loadChildren: './pages/chat/single-chat/single-chat.module#SingleChatPageModule'}
 ];
 
 @NgModule({
