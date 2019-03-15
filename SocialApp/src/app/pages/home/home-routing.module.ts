@@ -24,8 +24,8 @@ const routes: Routes = [
                         loadChildren: '../chat/chat.module#ChatPageModule'
                     },
                     {
-                        path: 'single-chat',
-                        loadChildren: '../chat/single-chat/single-chat.module#SingleChatPageModule'
+                        path: 'new-chat',
+                        loadChildren: '../chat/new-chat/new-chat.module#NewChatPageModule'
                     }
                 ]
 

@@ -1,0 +1,13 @@
+input{
+  border-color: transparent;
+  box-shadow: transparent;
+  border-radius: 10px;
+  color: var(--app-color, black);
+
+
+}
+
+input::placeholder {
+  color: var(--ion-color-primary, gray);
+  padding-left: 5px;
+}
