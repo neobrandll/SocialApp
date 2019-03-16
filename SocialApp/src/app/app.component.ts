@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  private darkMode: boolean = false;
+  private darkMode = false;
 
   constructor(
     private platform: Platform,
