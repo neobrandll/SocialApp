@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 
 @Component({
@@ -53,11 +53,17 @@ export class RegisterPage implements OnInit {
      }
   }
 
+
   onSwitchToLogin() {
     this.router.navigate(['/', 'auth']);
   }
 
   onRegister() {
+    if (!this.form.valid) {
+      return;
+    }
+    const email = this.form.value.email;
+    const password = this.form.value.password;
     this.onSwitchToLogin();
   }
 }

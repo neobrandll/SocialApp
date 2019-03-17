@@ -26,7 +26,7 @@
         </ion-item>
         <ion-item *ngIf="!form.get('password').valid && form.get('password').touched" lines="none">
           <ion-label>
-            Password should at least be 4 characters long.
+            Should at least be 4 characters long
           </ion-label>
         </ion-item>
       </ion-col>
@@ -46,17 +46,10 @@
                 color="primary"
                 (click)="onLogin()"
                 expand="block"
-                [disabled]="!form.valid">
+                >
           Login
         </ion-button>
-        <!--<ion-button-->
-                <!--type="submit"-->
-                <!--color="primary"-->
-                <!--(click)="onLogin()"-->
-                <!--expand="block"-->
-                <!--&gt;-->
-          <!--Login-->
-        <!--</ion-button>-->
+
       </ion-col>
     </ion-row>
   </ion-grid>

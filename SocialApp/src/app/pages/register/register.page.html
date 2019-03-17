@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>Sign Up</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -40,7 +40,7 @@
           </ion-item>
           <ion-item *ngIf="!form.get('email').valid && form.get('email').touched" lines="none">
             <ion-label>
-              Please enter a valid Email!
+              Please enter a valid Email
             </ion-label>
           </ion-item>
         </ion-col>
@@ -56,7 +56,7 @@
           </ion-item>
           <ion-item *ngIf="!form.get('password').valid && form.get('password').touched" lines="none">
             <ion-label>
-              Should at least be 4 characters long.
+              Should at least be 4 characters long
             </ion-label>
           </ion-item>
         </ion-col>
@@ -71,8 +71,8 @@
           ></ion-input>
           </ion-item>
           <ion-item *ngIf="!pwdMatch && form.get('password').touched && form.get('passwordConfirm')" lines="none">
-            <ion-label color="danger">
-              Passwords doesn't match.
+            <ion-label>
+              Passwords doesn't match
             </ion-label>
           </ion-item>
         </ion-col>
@@ -93,8 +93,9 @@
                   (click)="onRegister()"
                   expand="block"
                   [disabled]="!form.valid">
-            Register
+            Sign Up
           </ion-button>
+
 
         </ion-col>
       </ion-row>
