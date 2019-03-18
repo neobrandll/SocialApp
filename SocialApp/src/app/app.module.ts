@@ -11,11 +11,12 @@ import { AppRoutingModule } from './app-routing.module';
 import {NewPostComponent} from './components/new-post/new-post.component';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, NewPostComponent],
   entryComponents: [NewPostComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [
     StatusBar,
     SplashScreen,

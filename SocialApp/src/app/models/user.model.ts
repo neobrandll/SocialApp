@@ -1,3 +1,5 @@
-export class Model {
-    constructor() {}
+export class User {
+    constructor(
+    public token: string
+    ) {}
 }
