@@ -17,7 +17,10 @@ export class AuthService {
     return this._userIsAuthenticated;
   }
 
-  constructor(private router: Router, private config: ConfigService, private http: HttpClient,  private alertController: AlertController) { }
+  constructor(private router: Router
+              , private config: ConfigService
+              , private http: HttpClient
+              , private alertController: AlertController) { }
 
   login(username: string, password: string) {
     const body = JSON.stringify({password: password, username: username});
@@ -29,7 +32,7 @@ export class AuthService {
     };
     return this.http.post<{message: string; token: string; status: number}>(`${serverUrl}/session/login`, body , httpOptions).
     pipe(tap(data => {
-      if (data.status === 200){
+      if (data.status === 200) {
         this._userIsAuthenticated = true;
         this.user.token = data.token;
       } else {
@@ -41,7 +44,24 @@ export class AuthService {
   }
 
   logout() {
-    this._userIsAuthenticated = false;
+    const serverUrl = this.config.url;
+    if (this.user.token) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          'Authorization': this.user.token
+        })
+      };
+      return this.http.get<{message: string; status: number}>(`${serverUrl}/session/logout`, httpOptions)
+          .pipe(tap(response => {
+            if (response.status === 200) {
+              this._userIsAuthenticated = false;
+            } else {
+              this.errorAlert();
+            }
+      }));
+    }
+
   }
   async errorAlert() {
     const alert = await this.alertController.create({
