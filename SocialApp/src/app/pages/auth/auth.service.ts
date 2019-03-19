@@ -10,7 +10,7 @@ import {AlertController} from '@ionic/angular';
   providedIn: 'root'
 })
 export class AuthService {
-  private _userIsAuthenticated = false;
+  private _userIsAuthenticated = true;
   user: User;
 
   get userIsAuthenticated() {
