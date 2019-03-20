@@ -64,7 +64,6 @@ export class AuthService {
             , data.user.following
             , data.user.profileImage
         );
-        console.log(newUser);
         this._user.next(newUser);
         this._userIsAuthenticated = true;
       }

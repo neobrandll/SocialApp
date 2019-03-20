@@ -3,7 +3,7 @@
     <ion-col offset="1" >
       <ion-item lines="none" no-padding >
         <ion-avatar>
-          <ion-img  [src]="serverUrl+ '/' + user.profileImage"></ion-img>
+          <ion-img  [src]=" user.profileImage ? serverUrl+ '/' + user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
         </ion-avatar>
       </ion-item>
     </ion-col>
