@@ -12,12 +12,12 @@ import {NewPostComponent} from './components/new-post/new-post.component';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import {HttpClientModule} from '@angular/common/http';
-import {UserMenuInfoComponent} from './components/user-menu-info/user-menu-info.component';
+import {ProfilePageModule} from './pages/profile/profile.module';
 
 @NgModule({
-  declarations: [AppComponent, NewPostComponent, UserMenuInfoComponent ],
+  declarations: [AppComponent, NewPostComponent ],
   entryComponents: [NewPostComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ProfilePageModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -25,6 +25,7 @@ import {UserMenuInfoComponent} from './components/user-menu-info/user-menu-info.
     Keyboard,
       Vibration
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule {}
