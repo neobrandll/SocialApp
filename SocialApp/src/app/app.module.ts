@@ -12,9 +12,10 @@ import {NewPostComponent} from './components/new-post/new-post.component';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import {HttpClientModule} from '@angular/common/http';
+import {UserMenuInfoComponent} from './components/user-menu-info/user-menu-info.component';
 
 @NgModule({
-  declarations: [AppComponent, NewPostComponent],
+  declarations: [AppComponent, NewPostComponent, UserMenuInfoComponent ],
   entryComponents: [NewPostComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [

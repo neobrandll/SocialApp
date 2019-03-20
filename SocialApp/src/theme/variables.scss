@@ -109,6 +109,13 @@ app-chat, app-discover, app-timeline, app-profile{
   ion-icon{
     color: var(--app-icons-color);
   }
+
+  ion-toolbar{
+    ion-icon{
+      color: white;
+    }
+  }
+
 }
 
 

@@ -1,5 +1,12 @@
 export class User {
     constructor(
-    public token: string
+    public token: string,
+    public id: string,
+    public email: string,
+    public name: string,
+    public username: string,
+    public followers: string[],
+    public following: string[],
+    public profileImage: string,
     ) {}
 }

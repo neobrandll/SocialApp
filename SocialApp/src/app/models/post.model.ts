@@ -1,12 +1,22 @@
 export class Post {
-    constructor(public postId: number, 
-                public userId: number,
-                public typePostId: number, 
-                public postText: string, 
-                public postUrl: string, 
-                public postCreationTime: string, 
-                public likes: string, 
-                public dislikes: string,
-                public comments: string,
-                public isMine: boolean) {}
+    constructor(
+        public info: {
+            id: string,
+            favoritesCount: number,
+            user: {
+                id: string,
+                name: string,
+                username: string,
+                profileImage: string
+            }
+        },
+        public content: {
+            createdTime: Date,
+            favoriters: [],
+            favorites: [],
+            image: string,
+            comments: [],
+            body: string,
+        }
+    ) {}
 }

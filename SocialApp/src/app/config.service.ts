@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ConfigService {
   constructor() {}
-  private _url: string;
+  private _url = 'http://' + '192.168.1.4:3000';
 
   get url() {
     return this._url;
