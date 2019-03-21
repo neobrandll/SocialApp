@@ -1,11 +1,9 @@
 <ion-grid no-padding *ngIf="user?.name">
   <ion-row style="height: 40%">
-    <ion-col offset="1" size="5" >
-      <ion-item lines="none" no-padding >
+    <ion-col offset="1" size="5">
         <ion-avatar>
           <ion-img  [src]=" user.profileImage ? serverUrl+ '/' + user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
         </ion-avatar>
-      </ion-item>
     </ion-col>
     <ion-col size="6" justify-content-end>
       <ion-button id="editBtn" fill="outline" size="small">

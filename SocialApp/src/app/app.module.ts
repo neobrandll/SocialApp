@@ -12,11 +12,12 @@ import {NewPostComponent} from './components/new-post/new-post.component';
 
 import {HttpClientModule} from '@angular/common/http';
 import {ProfilePageModule} from './pages/profile/profile.module';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, NewPostComponent ],
   entryComponents: [NewPostComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ProfilePageModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ProfilePageModule, ReactiveFormsModule],
   providers: [
     StatusBar,
     SplashScreen,

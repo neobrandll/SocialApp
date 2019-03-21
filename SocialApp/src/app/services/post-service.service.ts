@@ -1,12 +1,12 @@
 import {Injectable, OnInit} from '@angular/core';
 import {AlertController, ModalController} from '@ionic/angular';
 import {NewPostComponent} from '../components/new-post/new-post.component';
-import {Keyboard} from '@ionic-native/keyboard/ngx';
 import {BehaviorSubject} from 'rxjs';
 import {Post} from '../models/post.model';
 import {HttpClient} from '@angular/common/http';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
+import {AuthService} from '../pages/auth/auth.service';
 
 
 interface ResponsePost {
@@ -54,17 +54,17 @@ export class PostServiceService  {
     }
 
   constructor(private modalCtrl: ModalController,
-              private keyboard: Keyboard,
               private http: HttpClient,
-              private alertController: AlertController) { }
+              private alertController: AlertController,
+              private auth: AuthService) { }
 
   newPostModal() {
-  this.modalCtrl.create({component: NewPostComponent, componentProps: {}})
-      .then(modalEl => {
-        modalEl.present();
-        this.keyboard.show();
-        console.log(this.keyboard.isVisible);
-      });
+        this.auth.user.pipe(take(1)).subscribe(user => {
+            this.modalCtrl.create({component: NewPostComponent, componentProps: {user: user}})
+                .then(modalEl => {
+                    modalEl.present();
+                });
+        });
   }
 
 
