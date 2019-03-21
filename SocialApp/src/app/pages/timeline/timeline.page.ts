@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PostServiceService} from '../../services/post-service.service';
 import {LoadingController} from '@ionic/angular';
+import {Post} from '../../models/post.model';
 
 @Component({
   selector: 'app-timeline',
@@ -9,6 +10,7 @@ import {LoadingController} from '@ionic/angular';
 })
 export class TimelinePage implements OnInit {
   isLoading = false;
+  postArr: Post[];
   constructor(private postService: PostServiceService, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
@@ -23,7 +25,7 @@ export class TimelinePage implements OnInit {
           this.postService.fetchPosts().subscribe(posts => {
             this.isLoading = false;
             loadingEl.dismiss();
-            console.log(posts);
+            this.postArr = posts;
           }, () => {
             loadingEl.dismiss();
           });

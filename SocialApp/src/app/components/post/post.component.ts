@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {Post} from '../../models/post.model';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-post',
@@ -8,9 +9,15 @@ import {Post} from '../../models/post.model';
 })
 
 export class PostComponent implements OnInit {
-    post: Post;
+  @Input() post: Post;
+  serverUrl: string;
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  this.serverUrl = environment.url;
+}
 
+print() {
+    console.log(this.post);
+}
 }

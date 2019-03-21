@@ -6,6 +6,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { TimelinePage } from './timeline.page';
+import {SharedModule} from '../../shared/shared.module';
+
+
 
 const routes: Routes = [
   {
@@ -19,8 +22,10 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+      SharedModule
   ],
   declarations: [TimelinePage]
+
 })
 export class TimelinePageModule {}

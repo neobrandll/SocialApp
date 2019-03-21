@@ -13,18 +13,17 @@ import {NewPostComponent} from './components/new-post/new-post.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ProfilePageModule} from './pages/profile/profile.module';
 import {ReactiveFormsModule} from '@angular/forms';
-import {PostComponent} from './components/post/post.component';
+import {SharedModule} from './shared/shared.module';
 
 @NgModule({
-  declarations: [AppComponent, NewPostComponent, PostComponent ],
+  declarations: [AppComponent, NewPostComponent ],
   entryComponents: [NewPostComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ProfilePageModule, ReactiveFormsModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ProfilePageModule, ReactiveFormsModule, SharedModule],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
-  bootstrap: [AppComponent],
-  exports: []
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
