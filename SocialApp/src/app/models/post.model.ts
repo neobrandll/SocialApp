@@ -1,22 +1,15 @@
+import {PostUserData} from './postUserData.model';
+
 export class Post {
     constructor(
-        public info: {
-            id: string,
-            favoritesCount: number,
-            user: {
-                id: string,
-                name: string,
-                username: string,
-                profileImage: string
-            }
-        },
-        public content: {
-            createdTime: Date,
-            favoriters: [],
-            favorites: [],
-            image: string,
-            comments: [],
-            body: string,
-        }
+    public favoritesCount: number,
+    public user: PostUserData,
+    public _id: string,
+    public createdAt: string,
+    public favoriters: [],
+    public favorites: [],
+    public image: string,
+    public comments: [],
+    public body: string
     ) {}
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {tap, map} from 'rxjs/operators';
+import {tap, map, take} from 'rxjs/operators';
 import {User} from '../../models/user.model';
 import {AlertController} from '@ionic/angular';
 import {BehaviorSubject, from} from 'rxjs';
@@ -129,7 +129,25 @@ export class AuthService {
           if (!storedData || !storedData.value) {
             return null;
           }
-          const user = JSON.parse(storedData.value) as User;
+          const parsedData = JSON.parse(storedData.value) as {
+              _token: string,
+              id: string,
+              email: string,
+              name: string,
+              username: string,
+              followers: string[],
+              following: string[],
+              profileImage: string,
+          };
+          const user = new User(parsedData._token
+              , parsedData.id
+              , parsedData.email
+              , parsedData.name
+              , parsedData.username
+              , parsedData.followers
+              , parsedData.following
+              , parsedData.profileImage
+              );
           return user;
         }),
         tap(userData => {

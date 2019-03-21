@@ -13,9 +13,10 @@ import {NewPostComponent} from './components/new-post/new-post.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ProfilePageModule} from './pages/profile/profile.module';
 import {ReactiveFormsModule} from '@angular/forms';
+import {PostComponent} from './components/post/post.component';
 
 @NgModule({
-  declarations: [AppComponent, NewPostComponent ],
+  declarations: [AppComponent, NewPostComponent, PostComponent ],
   entryComponents: [NewPostComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ProfilePageModule, ReactiveFormsModule],
   providers: [

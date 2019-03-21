@@ -1,19 +1,16 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AlertController, ModalController} from '@ionic/angular';
 import {NewPostComponent} from '../components/new-post/new-post.component';
 import {BehaviorSubject} from 'rxjs';
 import {Post} from '../models/post.model';
-import {HttpClient} from '@angular/common/http';
-import {switchMap, take, tap} from 'rxjs/operators';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {map, switchMap, take, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {AuthService} from '../pages/auth/auth.service';
+import {PostUserData} from '../models/postUserData.model';
 
 
-interface ResponsePost {
-    status: number;
-    message: string;
-    data: Post[];
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -27,60 +24,74 @@ export class PostServiceService  {
     }
 
     fetchPosts() {
-        return this.http.get<ResponsePost>(`${this.url}/posts/getPosts` ).pipe(tap(response => {
-            if (response.status === 200) {
-                this._posts.next(response.data);
-            } else {
-                this.errorAlert();
+        return this.auth.token.pipe(take(1), switchMap(token => {
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Authorization': `Bearer ${token}`
+                })
+            };
+            return this.http.get<{title: string, tweets: Post[]}>(`${this.url}/tweets`, httpOptions );
+        } ), map(resData => {
+            const posts = [];
+            for (const tuit of resData.tweets) {
+                posts.push(new Post(tuit.favoritesCount,
+                    new PostUserData(tuit.user._id,
+                        tuit.user.name,
+                        tuit.user.username,
+                        tuit.user.profileImage),
+                    tuit._id,
+                    tuit.createdAt,
+                    tuit.favoriters,
+                    tuit.favorites,
+                    tuit.image,
+                    tuit.comments,
+                    tuit.body));
             }
-        }));
-    }
-
-    addPost (text: string , img? ) {
-
-        const url = this.url;
-        let urlAction: string;
-        let content;
-        if (img) {
-            urlAction = '/posts/createImagePost/post';
-            content = {text, img};
-        } else {
-            urlAction = '/posts/createPost';
-            content = {text};
-        }
-        return this.http
-            .post<{ status: number, name: string }>(
-                `${url}${urlAction}`, content);
+            return posts;
+        }), tap(posts => {
+            this._posts.next(posts);
+        }) );
     }
 
   constructor(private modalCtrl: ModalController,
               private http: HttpClient,
-              private alertController: AlertController,
-              private auth: AuthService) { }
+              private alertCtrl: AlertController,
+              private auth: AuthService
+  ) { }
 
   newPostModal() {
+      let newPost: Post;
         this.auth.user.pipe(take(1)).subscribe(user => {
             this.modalCtrl.create({component: NewPostComponent, componentProps: {user: user}})
                 .then(modalEl => {
                     modalEl.present();
-                });
+                    return modalEl.onDidDismiss();
+                }).then(resultData => {
+                    if (resultData.role === 'confirm') {
+                        const tuit = resultData.data.post.tweet;
+                         newPost = new Post(tuit.favoritesCount,
+                            new PostUserData(tuit.user.id,
+                                tuit.user.name,
+                                tuit.user.username,
+                                tuit.user.profileImage),
+                            tuit.id,
+                            tuit.createdAt,
+                            tuit.favoriters,
+                            tuit.favorites,
+                            tuit.image,
+                            tuit.comments,
+                            tuit.body);
+                    }
+                    this.post.pipe(take(1)).subscribe(posts => {
+                       this._posts.next(posts.concat(newPost));
+                    });
+            });
         });
   }
 
 
 
-    async errorAlert() {
-        const alert = await this.alertController.create({
-            header: 'Error',
-            message: 'An error ocurred',
-            buttons: [{
-                text: 'Ok',
-                handler: () => {
-                    alert.dismiss();
-                }
-            }]
-        });
 
-        await alert.present();
-    }
+
+
 }

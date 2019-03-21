@@ -1,9 +1,9 @@
 <ion-grid no-padding *ngIf="user?.name">
   <ion-row style="height: 40%">
-    <ion-col offset="1" size="5">
-        <ion-avatar>
-          <ion-img  [src]=" user.profileImage ? serverUrl+ '/' + user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
-        </ion-avatar>
+    <ion-col offset="1" size="5" >
+        <ion-avatar >
+          <ion-img  [src]=" user.profileImage !=='' ? serverUrl+ '/' + user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
+        </ion-avatar >
     </ion-col>
     <ion-col size="6" justify-content-end>
       <ion-button id="editBtn" fill="outline" size="small">
@@ -12,7 +12,7 @@
     </ion-col>
   </ion-row >
   <ion-row style="height: 20%"  >
-    <ion-col offset="1" >
+    <ion-col offset="1" style="padding-top: 1.5vh">
       <ion-label> {{user.name}} </ion-label>
     </ion-col>
   </ion-row>

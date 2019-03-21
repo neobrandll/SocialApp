@@ -1,8 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ModalController} from '@ionic/angular';
+import {AlertController, ModalController} from '@ionic/angular';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../models/user.model';
 import {environment} from '../../../environments/environment';
+import {switchMap, take, tap} from 'rxjs/operators';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Post} from '../../models/post.model';
+import {AuthService} from '../../pages/auth/auth.service';
 
 
 
@@ -15,7 +19,11 @@ export class NewPostComponent implements OnInit {
  form: FormGroup;
   @Input() user: User;
   serverUrl: string;
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private modalCtrl: ModalController,
+              private alertCtrl: AlertController,
+              private auth: AuthService,
+              private http: HttpClient
+  ) { }
 
   ngOnInit() {
     this.serverUrl = environment.url;
@@ -29,5 +37,46 @@ export class NewPostComponent implements OnInit {
 
   onCancel() {
     this.modalCtrl.dismiss(null, 'cancel');
+  }
+
+  onSubmit() {
+    if (!this.form.valid) {
+      return;
+    }
+    const text = this.form.value.postText;
+    this.newPost(text).subscribe((data) => {
+      this.modalCtrl.dismiss({ post: data }, 'confirm');
+    }, error => {
+      console.log(error);
+    });
+  }
+
+
+  newPost(text: string, image?: any) {
+    const formData = new FormData();
+    formData.append('body', text);
+    if (image) {
+      formData.append('image', image);
+    }
+    return this.auth.token.pipe(take(1), switchMap(token => {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        })
+      };
+      return this.http.post<Post>(`${this.serverUrl}/tweets`, formData , httpOptions);
+    } ) );
+  }
+
+
+
+  private showAlert( header: string , message: string) {
+    this.alertCtrl
+        .create({
+          header: header,
+          message: message,
+          buttons: ['okay']
+        })
+        .then(alertEl => alertEl.present());
   }
 }
