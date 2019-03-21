@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../../pages/auth/auth.service';
 import {User} from '../../models/user.model';
 import {Subscription} from 'rxjs';
-import {ConfigService} from '../../config.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-menu-info',
@@ -10,17 +10,18 @@ import {ConfigService} from '../../config.service';
   styleUrls: ['./user-menu-info.component.scss'],
 })
 export class UserMenuInfoComponent implements OnInit, OnDestroy {
+ url = environment.url;
  user: User;
  userSub: Subscription;
  isAuth: boolean;
   serverUrl: string;
-  constructor(private authService: AuthService, private config: ConfigService ) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
    this.userSub =  this.authService.user.subscribe(userdata => {
      this.user = userdata;
    });
-    this.serverUrl = this.config.url;
+    this.serverUrl = this.url;
   }
   ngOnDestroy(): void {
     this.userSub.unsubscribe();

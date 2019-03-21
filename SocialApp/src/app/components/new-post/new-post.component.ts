@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalController} from '@ionic/angular';
-import {Keyboard} from '@ionic-native/keyboard/ngx';
-import {Vibration} from '@ionic-native/vibration/ngx';
+
 
 
 @Component({
@@ -11,11 +10,9 @@ import {Vibration} from '@ionic-native/vibration/ngx';
 })
 export class NewPostComponent implements OnInit {
 
-  constructor(private modalCtrl: ModalController, private keyboard: Keyboard, private vibration: Vibration) { }
+  constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
-    this.keyboard.show();
-    this.vibration.vibrate([2000, 1000, 2000]);
   }
 
   onCancel() {

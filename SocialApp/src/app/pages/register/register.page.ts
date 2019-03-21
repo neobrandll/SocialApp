@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {ConfigService} from '../../config.service';
-import {AlertController} from '@ionic/angular';
+import {AlertController, LoadingController} from '@ionic/angular';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -13,11 +13,12 @@ import {AlertController} from '@ionic/angular';
 export class RegisterPage implements OnInit {
  form: FormGroup;
  pwdMatch = false;
+ url = environment.url;
   constructor(
                 private router: Router
               , private http: HttpClient
-              , private config: ConfigService
-              , private  alertCtrl: AlertController
+              , private  alertCtrl: AlertController,
+                private loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
@@ -70,12 +71,18 @@ export class RegisterPage implements OnInit {
     const password = this.form.value.password;
     const username = this.form.value.username;
     const name = this.form.value.name;
+
+      this.loadingCtrl
+          .create({ keyboardClose: true, message: 'Logging in...' })
+          .then(loadingEl => {
+              loadingEl.present();
     const body = new HttpParams()
           .set('email', email)
           .set('password', password)
           .set('username', username)
-          .set('name', name);
-      const serverUrl = this.config.url;
+          .set('name', name)
+          .set('provider', 'local');
+      const serverUrl = this.url;
       const httpOptions = {
           headers: new HttpHeaders({
               'Content-Type':  'application/x-www-form-urlencoded'
@@ -83,39 +90,32 @@ export class RegisterPage implements OnInit {
       };
        this.http.post<any>(`${serverUrl}/signup`, body.toString() , httpOptions )
            .subscribe(() => {
-               this.alertCtrl
-                   .create({
-                       header: 'Register',
-                       message: `Register complete!`,
-                       buttons: [
-                           {
-                               text: 'Okay',
-                               handler: () => {
-                                   this.router.navigate(['/auth']);
-                               }
-                           }
-                       ]
-                   })
-                   .then(alertEl => {
-                       alertEl.present();
-                   });
+                   loadingEl.dismiss();
+                   this.showAlert('Register', `Register complete!`, true );
            }, error => {
-                   this.alertCtrl
-                       .create({
-                           header: 'Error',
-                           message: `${error.error.error.errmsg}`,
-                           buttons: [
-                               {
-                                   text: 'Okay',
-                                   handler: () => {
-                                       this.router.navigate(['/register']);
-                                   }
-                               }
-                           ]
-                       })
-                       .then(alertEl => {
-                           alertEl.present();
-                       });
+                   loadingEl.dismiss();
+                   this.showAlert('Error', error.error.error.errmsg, false );
        });
+          });
   }
+
+    private showAlert( header: string , message: string, complete: boolean) {
+        this.alertCtrl
+            .create({
+                header: header,
+                message: message,
+                buttons: [
+                        {
+                            text: 'Okay',
+                            handler: () => {
+                                if (complete) {
+                                    this.form.reset();
+                                    this.router.navigate(['/auth']);
+                                }
+                            }
+                        }
+                    ]
+            })
+            .then(alertEl => alertEl.present());
+    }
 }

@@ -9,8 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {NewPostComponent} from './components/new-post/new-post.component';
-import {Keyboard} from '@ionic-native/keyboard/ngx';
-import { Vibration } from '@ionic-native/vibration/ngx';
+
 import {HttpClientModule} from '@angular/common/http';
 import {ProfilePageModule} from './pages/profile/profile.module';
 
@@ -21,9 +20,7 @@ import {ProfilePageModule} from './pages/profile/profile.module';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Keyboard,
-      Vibration
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],
   exports: []

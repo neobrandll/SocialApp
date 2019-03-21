@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
-import {ConfigService} from '../../config.service';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {tap} from 'rxjs/operators';
+import {tap, map} from 'rxjs/operators';
 import {User} from '../../models/user.model';
 import {AlertController} from '@ionic/angular';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, from} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import { Plugins } from '@capacitor/core';
 
 interface UserData {
   user: {
@@ -26,48 +27,69 @@ interface UserData {
 export class AuthService {
   private _userIsAuthenticated = false;
   private _user = new BehaviorSubject<User>(null);
+  url = environment.url;
 
   get user() {
     return this._user.asObservable();
   }
 
   get userIsAuthenticated() {
-    return this._userIsAuthenticated;
+    return this._user.asObservable().pipe(
+        map(user => {
+          if (user) {
+            return !!user.token;
+          } else {
+            return false;
+          }
+        })
+    );
+  }
+
+  get token() {
+    return this._user.asObservable().pipe(
+        map(user => {
+          if (user) {
+            return user.token;
+          } else {
+            return null;
+          }
+        })
+    );
   }
 
   constructor(private router: Router
-              , private config: ConfigService
-              , private http: HttpClient
-              , private alertCtrl: AlertController
-              ) { }
+      , private http: HttpClient
+      , private alertCtrl: AlertController
+  ) {
+  }
 
   login = (email: string, password: string) => {
     const body = new HttpParams()
         .set('email', email)
         .set('password', password);
-    const serverUrl = this.config.url;
+    const serverUrl = this.url;
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/x-www-form-urlencoded'
-      }),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
     };
-    return this.http.post<UserData>(`${serverUrl}/login`, body.toString() , httpOptions ).
-    pipe(tap(data => {
-      if (data.user) {
-        const newUser = new User(
-              data.user.token
-            , data.user._id
-            , data.user.email
-            , data.user.name
-            , data.user.username
-            , data.user.followers
-            , data.user.following
-            , data.user.profileImage
-        );
-        this._user.next(newUser);
-        this._userIsAuthenticated = true;
-      }
-    },
+    return this.http.post<UserData>(`${serverUrl}/login`, body.toString(), httpOptions).pipe(tap(data => {
+          if (data.user) {
+            const newUser = new User(
+                data.user.token
+                , data.user._id
+                , data.user.email
+                , data.user.name
+                , data.user.username
+                , data.user.followers
+                , data.user.following
+                , data.user.profileImage
+            );
+            this._user.next(newUser);
+            this.storeUserData(newUser);
+            this._userIsAuthenticated = true;
+          }
+        },
         errorData => {
           this.alertCtrl
               .create({
@@ -87,28 +109,38 @@ export class AuthService {
               });
         }
     ));
-
   }
 
   logout() {
-    // const serverUrl = this.config.url;
-    // if (this.user.token) {
-    //   const httpOptions = {
-    //     headers: new HttpHeaders({
-    //       'Content-Type':  'application/json',
-    //       'Authorization': this.user.token
-    //     })
-    //   };
-    //   return this.http.get<{message: string; status: number}>(`${serverUrl}/session/logout`, httpOptions)
-    //       .pipe(tap(response => {
-    //         if (response.status === 200) {
-    //           this._userIsAuthenticated = false;
-    //         } else {
-    //           this.errorAlert();
-    //         }
-    //   }));
-    // }
+    this._user.next(null);
+    Plugins.Storage.remove({ key: 'userData' });
+  }
 
+  private storeUserData (
+      user: User
+  ) {
+    const data = JSON.stringify(user);
+    Plugins.Storage.set({ key: 'userData', value: data });
+  }
+
+  autoLogin() {
+    return from(Plugins.Storage.get({ key: 'userData' })).pipe(
+        map(storedData => {
+          if (!storedData || !storedData.value) {
+            return null;
+          }
+          const user = JSON.parse(storedData.value) as User;
+          return user;
+        }),
+        tap(userData => {
+          if (userData) {
+            this._user.next(userData);
+          }
+        }),
+        map(user => {
+          return !!user;
+        })
+    );
   }
 
 

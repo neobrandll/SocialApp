@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {AlertController, ModalController} from '@ionic/angular';
 import {NewPostComponent} from '../components/new-post/new-post.component';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
@@ -6,7 +6,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Post} from '../models/post.model';
 import {HttpClient} from '@angular/common/http';
 import {switchMap, take, tap} from 'rxjs/operators';
-import {ConfigService} from '../config.service';
+import {environment} from '../../environments/environment';
 
 
 interface ResponsePost {
@@ -18,16 +18,16 @@ interface ResponsePost {
 @Injectable({
   providedIn: 'root'
 })
-export class PostServiceService {
+export class PostServiceService  {
     private _posts = new BehaviorSubject<Post[]>([]);
+    url = environment.url;
 
     get post() {
         return this._posts.asObservable();
     }
 
     fetchPosts() {
-        const url = this.config.url;
-        return this.http.get<ResponsePost>(`${url}/posts/getPosts` ).pipe(tap(response => {
+        return this.http.get<ResponsePost>(`${this.url}/posts/getPosts` ).pipe(tap(response => {
             if (response.status === 200) {
                 this._posts.next(response.data);
             } else {
@@ -38,7 +38,7 @@ export class PostServiceService {
 
     addPost (text: string , img? ) {
 
-        const url = this.config.url;
+        const url = this.url;
         let urlAction: string;
         let content;
         if (img) {
@@ -56,7 +56,6 @@ export class PostServiceService {
   constructor(private modalCtrl: ModalController,
               private keyboard: Keyboard,
               private http: HttpClient,
-              private config: ConfigService,
               private alertController: AlertController) { }
 
   newPostModal() {

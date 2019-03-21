@@ -1,6 +1,6 @@
 export class User {
     constructor(
-    public token: string,
+    private _token: string,
     public id: string,
     public email: string,
     public name: string,
@@ -9,4 +9,9 @@ export class User {
     public following: string[],
     public profileImage: string,
     ) {}
+
+
+    get token() {
+        return this._token;
+    }
 }
