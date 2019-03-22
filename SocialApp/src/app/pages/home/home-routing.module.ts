@@ -46,6 +46,10 @@ const routes: Routes = [
         loadChildren: '../user-profile/user-profile.module#UserProfilePageModule'
     },
     {
+        path: 'tweet',
+        loadChildren: '../individual-tuit/individual-tuit.module#IndividualTuitPageModule'
+    },
+    {
        path: '',
         redirectTo: '/home/tabs/timeline',
         pathMatch: 'full'

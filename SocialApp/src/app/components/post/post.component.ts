@@ -176,4 +176,9 @@ ngOnDestroy(): void {
   goToProfile(userId: string) {
     this.router.navigate(['home', 'userProfile', userId]);
   }
+
+  goIndividualTuit() {
+    this.postService.setIndividualPost(this.post);
+    this.router.navigate(['home', 'tweet']);
+  }
 }

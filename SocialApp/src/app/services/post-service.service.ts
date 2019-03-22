@@ -17,6 +17,7 @@ import {PostUserData} from '../models/postUserData.model';
 })
 export class PostServiceService  {
     private _posts = new BehaviorSubject<Post[]>([]);
+    private _individualPost = new BehaviorSubject<Post>(null);
     url = environment.url;
 
     get post() {
@@ -92,7 +93,13 @@ export class PostServiceService  {
   }
 
 
+get individualPost() {
+        return this._individualPost.asObservable();
+}
 
+  setIndividualPost(post: Post){
+        this._individualPost.next(post);
+  }
 
 
 

@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>individualTuit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-post [post]="post"></app-post>
+  <app-comment *ngFor="let comment of post.comments " [comment]="comment"></app-comment>
+</ion-content>

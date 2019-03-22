@@ -31,6 +31,7 @@ interface UserResponse {
 })
 export class UserProfilePage implements OnInit {
   user: UserProfile;
+  myUser: User;
   isLoading = false;
   serverUrl: string;
   constructor(private route: ActivatedRoute,
@@ -47,10 +48,11 @@ export class UserProfilePage implements OnInit {
         return;
       }
       this.isLoading = true;
-      this.auth.token.pipe(take(1), switchMap(token => {
+      this.auth.user.pipe(take(1), switchMap(user => {
+        this.myUser = user;
         const httpOptions = {
           headers: new HttpHeaders({
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${this.myUser.token}`
           })
         };
         return this.http.get<UserResponse>(`${this.serverUrl}/users/${paramMap.get('id')}`, httpOptions);
@@ -67,7 +69,6 @@ export class UserProfilePage implements OnInit {
             , userResp.tweetCount
             , userResp.followerCount
             , userResp.followingCount);
-        console.log(this.user);
       });
     });
   }

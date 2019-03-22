@@ -1,17 +1,21 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { Plugins, Capacitor } from '@capacitor/core';
 
 import {AuthService} from './pages/auth/auth.service';
 import {Router} from '@angular/router';
+import {User} from './models/user.model';
+import {Subscription} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent {
+export class AppComponent  {
   private darkMode = false;
+  user: User;
 
   constructor(
     private platform: Platform,
@@ -21,6 +25,7 @@ export class AppComponent {
   ) {
     this.initializeApp();
   }
+
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -53,4 +58,9 @@ export class AppComponent {
 
   }
 
+  goToProfile() {
+    this.authService.user.pipe(take(1)).subscribe( user => {
+      this.router.navigate(['home', 'userProfile', user.id]);
+    });
+  }
 }

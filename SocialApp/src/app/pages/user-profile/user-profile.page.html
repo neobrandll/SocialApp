@@ -6,6 +6,6 @@
   </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="user">
-  <app-user-profileID [userData]="user"></app-user-profileID>
+  <app-user-profileID [userData]="user" [myUser]="myUser"></app-user-profileID>
   <app-post *ngFor="let tweet of user.tweets" [post]="tweet"></app-post>
 </ion-content>

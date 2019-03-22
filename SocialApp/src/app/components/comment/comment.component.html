@@ -1,0 +1,24 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="3">
+      <ion-avatar (click)="goToProfile(comment.user._id)">
+        <ion-img  [src]=" comment.user.profileImage !=='' ? serverUrl+ '/' + comment.user.profileImage  : '../../../assets/imgs/nopic.png' "  ></ion-img>
+      </ion-avatar>
+    </ion-col>
+    <ion-col size="9">
+      <ion-grid no-padding>
+        <ion-row>
+          <ion-col>
+            <ion-text id="name">{{comment.user.name }} </ion-text>
+            <ion-text id="username">@{{comment.user.username }}</ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-item lines="none">
+            <ion-textarea no-padding rows="6" [value]="comment.body" ></ion-textarea>
+          </ion-item>
+        </ion-row>
+      </ion-grid>
+    </ion-col>
+  </ion-row>
+</ion-grid>
