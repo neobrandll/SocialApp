@@ -35,8 +35,8 @@
           </ion-button>
         </ion-col>
         <ion-col size="3">
-          <ion-button fill="clear">
-            <ion-icon name="heart-empty" size="small"></ion-icon>
+          <ion-button fill="clear" (click)="likeHandler()">
+            <ion-icon [name]=" liked ? 'heart' : 'heart-empty'" size="small"></ion-icon>
             <ion-label>{{post.favoritesCount}}</ion-label>
           </ion-button>
         </ion-col>

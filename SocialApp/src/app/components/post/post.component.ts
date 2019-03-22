@@ -7,6 +7,9 @@ import {take} from 'rxjs/operators';
 import {AlertController, ModalController} from '@ionic/angular';
 import {NewCommentComponent} from '../new-comment/new-comment.component';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {User} from '../../models/user.model';
+import {AuthService} from '../../pages/auth/auth.service';
+import {PostServiceService} from '../../services/post-service.service';
 
 @Component({
   selector: 'app-post',
@@ -17,13 +20,18 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 export class PostComponent implements OnInit {
   @Input() post: Post;
   serverUrl: string;
-  constructor(private modalCtrl: ModalController,
+  liked: boolean;
+  user: User;
+  constructor(private auth: AuthService,
+              private modalCtrl: ModalController,
               private http: HttpClient,
-              private alertCtrl: AlertController
+              private alertCtrl: AlertController,
+              private postService: PostServiceService
   ) { }
 
   ngOnInit() {
   this.serverUrl = environment.url;
+  this.verifyLike();
 }
 
 newComment() {
@@ -62,6 +70,39 @@ newComment() {
           buttons: ['Okay']
         })
         .then(alertEl => alertEl.present());
+  }
+
+  verifyLike() {
+    this.auth.user.pipe(take(1)).subscribe(user => {
+      this.user = user;
+      this.liked = this.post.favoriters.some(id => {
+        return id === user.id;
+      });
+    });
+  }
+
+  likeHandler() {
+    let urlAction: string;
+    console.log(this.user.token);
+    if (this.liked) {
+      urlAction = `${this.serverUrl}/tweets/${this.post._id}/favorites/unlike`;
+    } else {
+      urlAction = `${this.serverUrl}/tweets/${this.post._id}/favorites`;
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${this.user.token}`
+      })
+    };
+    const body = new HttpParams()
+        .set('tweet', this.post._id);
+    this.http.post<any>(urlAction, body.toString(), httpOptions).subscribe(() => {
+      this.liked = !this.liked;
+      this.postService.fetchPosts().pipe(take(1)).subscribe();
+    }, error => {
+      this.showAlert('Error', 'An error has occurred trying to like the post');
+    });
   }
 
 }
