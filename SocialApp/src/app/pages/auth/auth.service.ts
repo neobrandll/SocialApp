@@ -21,6 +21,7 @@ interface UserData {
   };
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -161,7 +162,10 @@ export class AuthService {
     );
   }
 
-
+updateUser(updatedUser: User) {
+      this._user.next(updatedUser);
+      this.storeUserData(updatedUser);
+}
 
 
 }

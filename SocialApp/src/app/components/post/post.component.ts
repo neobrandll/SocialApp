@@ -11,7 +11,8 @@ import {User} from '../../models/user.model';
 import {AuthService} from '../../pages/auth/auth.service';
 import {PostServiceService} from '../../services/post-service.service';
 import {Subscription} from 'rxjs';
-
+import { Plugins } from '@capacitor/core';
+const { Share } = Plugins;
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -139,7 +140,7 @@ ngOnDestroy(): void {
       buttons: [{
         text: 'WhatsApp',
         icon: 'logo-whatsapp',
-        handler: () => { console.log('wip');}
+        handler: () => { this.shareSocial();}
       },
         {
           text: 'Facebook',
@@ -161,4 +162,12 @@ ngOnDestroy(): void {
     });
   }
 
+  async shareSocial() {
+    const shareRet = await Share.share({
+      title: 'See cool stuff',
+      text: 'Really awesome thing you need to see right meow',
+      url: 'http://ionicframework.com/',
+      dialogTitle: 'Share with buddies'
+    });
+  }
 }

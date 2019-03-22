@@ -1,13 +1,9 @@
 ion-input{
-  border-color: transparent;
-  box-shadow: transparent;
-  border-radius: 10px;
-  color: var(--app-color, black);
-
-
+    border-radius: 10px;
+  --background : var(--ion-background-color);
+  --color: #ec0662;
+  --placeholder-color: #ec0662;
+  --placeholder-opacity: 1;
 }
 
-ion-input::placeholder {
-  color: var(--ion-color-primary, gray);
-  padding-left: 5px;
-}
+

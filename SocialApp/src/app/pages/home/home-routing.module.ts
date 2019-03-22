@@ -38,6 +38,10 @@ const routes: Routes = [
         ]
     },
     {
+        path: 'edit',
+        loadChildren: '../edit-profile/edit-profile.module#EditProfilePageModule'
+    },
+    {
        path: '',
         redirectTo: '/home/tabs/timeline',
         pathMatch: 'full'

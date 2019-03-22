@@ -13,7 +13,8 @@ const routes: Routes = [
   { path: 'timeline', loadChildren: './pages/timeline/timeline.module#TimelinePageModule', canLoad: [AuthGuard] },
   { path: 'chat', loadChildren: './pages/chat/chat.module#ChatPageModule'},
   { path: 'new-chat', loadChildren: './pages/chat/new-chat/new-chat.module#NewChatPageModule' },
-  { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' }
+  { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
+  { path: 'edit-profile', loadChildren: './pages/edit-profile/edit-profile.module#EditProfilePageModule' }
 ];
 
 @NgModule({
