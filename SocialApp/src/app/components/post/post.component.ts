@@ -12,7 +12,9 @@ import {AuthService} from '../../pages/auth/auth.service';
 import {PostServiceService} from '../../services/post-service.service';
 import {Subscription} from 'rxjs';
 import { Plugins } from '@capacitor/core';
+import {Router} from '@angular/router';
 const { Share } = Plugins;
+
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -31,7 +33,8 @@ export class PostComponent implements OnInit, OnDestroy {
               private http: HttpClient,
               private alertCtrl: AlertController,
               private postService: PostServiceService,
-              private actionSheetCtrl: ActionSheetController
+              private actionSheetCtrl: ActionSheetController,
+              private router: Router
   ) { }
 
   ngOnInit() {
@@ -169,5 +172,8 @@ ngOnDestroy(): void {
       url: 'http://ionicframework.com/',
       dialogTitle: 'Share with buddies'
     });
+  }
+  goToProfile(userId: string) {
+    this.router.navigate(['home', 'userProfile', userId]);
   }
 }

@@ -42,6 +42,10 @@ const routes: Routes = [
         loadChildren: '../edit-profile/edit-profile.module#EditProfilePageModule'
     },
     {
+        path: 'userProfile/:id',
+        loadChildren: '../user-profile/user-profile.module#UserProfilePageModule'
+    },
+    {
        path: '',
         redirectTo: '/home/tabs/timeline',
         pathMatch: 'full'

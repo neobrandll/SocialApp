@@ -1,0 +1,11 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="user">
+  <app-user-profileID [userData]="user"></app-user-profileID>
+  <app-post *ngFor="let tweet of user.tweets" [post]="tweet"></app-post>
+</ion-content>
