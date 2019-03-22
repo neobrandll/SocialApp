@@ -51,7 +51,7 @@ export class NewCommentComponent implements OnInit {
       return;
     }
     const text = this.form.value.commentText;
-      this.modalCtrl.dismiss({ comment: text }, 'confirm');
+      this.modalCtrl.dismiss({ comment: text, user: this.user }, 'confirm');
   }
 
   onCancel() {

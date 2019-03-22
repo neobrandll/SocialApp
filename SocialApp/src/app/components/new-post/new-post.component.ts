@@ -97,7 +97,5 @@ export class NewPostComponent implements OnInit {
         .then(alertEl => alertEl.present());
   }
 
-  printsrc(){
-      console.log(this.user);
-  }
+
 }
