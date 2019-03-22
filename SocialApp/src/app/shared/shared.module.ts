@@ -6,14 +6,15 @@ import {NewCommentComponent} from '../components/new-comment/new-comment.compone
 import {ReactiveFormsModule} from '@angular/forms';
 import {UserProfileComponentID} from '../components/user-profile/user-profile.componentID';
 import {CommentComponent} from '../components/comment/comment.component';
+import {QuickUserComponent} from '../components/quick-user/quick-user.component';
 
 
 
 @NgModule({
-    declarations: [ PostComponent, NewCommentComponent, UserProfileComponentID, CommentComponent
+    declarations: [ PostComponent, NewCommentComponent, UserProfileComponentID, CommentComponent, QuickUserComponent
     ],
     imports: [CommonModule, IonicModule, ReactiveFormsModule],
-    exports: [ PostComponent, NewCommentComponent, UserProfileComponentID, CommentComponent],
+    exports: [ PostComponent, NewCommentComponent, UserProfileComponentID, CommentComponent, QuickUserComponent],
     entryComponents: [NewCommentComponent]
 })
 export class SharedModule {}
