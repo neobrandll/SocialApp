@@ -62,7 +62,7 @@ export class PostServiceService  {
   newPostModal() {
       let newPost: Post;
         this.auth.user.pipe(take(1)).subscribe(user => {
-            this.modalCtrl.create({component: NewPostComponent, componentProps: {user: user}})
+            this.modalCtrl.create({component: NewPostComponent, componentProps: {}})
                 .then(modalEl => {
                     modalEl.present();
                     return modalEl.onDidDismiss();

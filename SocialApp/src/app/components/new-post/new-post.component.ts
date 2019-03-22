@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AlertController, ModalController} from '@ionic/angular';
+import {AlertController, LoadingController, ModalController} from '@ionic/angular';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../models/user.model';
 import {environment} from '../../../environments/environment';
@@ -16,23 +16,40 @@ import {AuthService} from '../../pages/auth/auth.service';
   styleUrls: ['./new-post.component.scss'],
 })
 export class NewPostComponent implements OnInit {
+ user: User;
  form: FormGroup;
-  @Input() user: User;
+ isloading = false;
   serverUrl: string;
   constructor(private modalCtrl: ModalController,
               private alertCtrl: AlertController,
               private auth: AuthService,
-              private http: HttpClient
+              private http: HttpClient,
+              private loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
-    this.serverUrl = environment.url;
-    this.form = new FormGroup({
-      postText: new FormControl(null, {
-        updateOn: 'change',
-        validators: [ Validators.required, Validators.minLength(1), Validators.maxLength(140)]
-      })
-    });
+      this.serverUrl = environment.url;
+      this.isloading = true;
+      this.loadingCtrl
+          .create({ keyboardClose: true, message: 'Loading...' })
+          .then(loadingEl => {
+              loadingEl.present();
+              this.auth.user.pipe(take(1)).subscribe(user => {
+                  this.user = user;
+                  this.form = new FormGroup({
+                      postText: new FormControl(null, {
+                          updateOn: 'change',
+                          validators: [ Validators.required, Validators.minLength(1), Validators.maxLength(140)]
+                      })
+                  });
+                  this.isloading = false;
+                  loadingEl.dismiss();
+              }, error => {
+                  loadingEl.dismiss();
+                  console.log(error);
+                  this.isloading = false;
+              });
+          });
   }
 
   onCancel() {
@@ -78,5 +95,9 @@ export class NewPostComponent implements OnInit {
           buttons: ['okay']
         })
         .then(alertEl => alertEl.present());
+  }
+
+  printsrc(){
+      console.log(this.user);
   }
 }

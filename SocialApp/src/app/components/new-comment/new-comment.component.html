@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start"  (click)="onCancel()" style="padding-left: 10px">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
+      <ion-icon slot="icon-only" name="close"></ion-icon>
     </ion-buttons>
     <ion-buttons slot="end" style="padding-right: 10px" >
       <ion-button [disabled]="!form?.valid" (click)="onSubmit()">
@@ -10,23 +10,23 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content *ngIf="!isloading">
-  <form [formGroup]="form">
+<ion-content>
+  <form [formGroup]="form" *ngIf="!isloading">
     <ion-grid>
       <ion-row>
-        <ion-col size="2" (click)="printsrc()">
-            <ion-avatar>
-              <ion-img  [src]=" user.profileImage !=='' ? serverUrl + '/' + user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
-            </ion-avatar>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-img  [src]=" post.user.profileImage !=='' ? url + '/' + post.user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
+          </ion-avatar>
         </ion-col>
         <ion-col size="10">
           <ion-item>
-            <ion-label position="floating">What's happening?</ion-label>
-            <ion-textarea rows="5" formControlName="postText" ></ion-textarea>
+            <ion-label position="floating">Replying to @{{post.user.username}}</ion-label>
+            <ion-textarea rows="5" formControlName="commentText" ></ion-textarea>
           </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
   </form>
-
 </ion-content>
+
