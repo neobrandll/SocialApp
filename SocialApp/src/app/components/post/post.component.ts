@@ -1,15 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import {Post} from '../../models/post.model';
 import {environment} from '../../../environments/environment';
 import {NewPostComponent} from '../new-post/new-post.component';
 import {PostUserData} from '../../models/postUserData.model';
 import {take} from 'rxjs/operators';
-import {AlertController, ModalController} from '@ionic/angular';
+import {ActionSheetController, AlertController, ModalController} from '@ionic/angular';
 import {NewCommentComponent} from '../new-comment/new-comment.component';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {User} from '../../models/user.model';
 import {AuthService} from '../../pages/auth/auth.service';
 import {PostServiceService} from '../../services/post-service.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -17,24 +18,31 @@ import {PostServiceService} from '../../services/post-service.service';
   styleUrls: ['./post.component.scss'],
 })
 
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnDestroy {
   @Input() post: Post;
   serverUrl: string;
   liked: boolean;
+  owner: boolean;
   user: User;
+  userSub: Subscription;
   constructor(private auth: AuthService,
               private modalCtrl: ModalController,
               private http: HttpClient,
               private alertCtrl: AlertController,
-              private postService: PostServiceService
+              private postService: PostServiceService,
+              private actionSheetCtrl: ActionSheetController
   ) { }
 
   ngOnInit() {
   this.serverUrl = environment.url;
-  this.verifyLike();
+    this.verifyLikeAndOwnership();
+}
+ngOnDestroy(): void {
+    this.userSub.unsubscribe();
 }
 
-newComment() {
+
+  newComment() {
   this.modalCtrl.create({component: NewCommentComponent, componentProps: {post: this.post}})
       .then(modalEl => {
         modalEl.present();
@@ -72,18 +80,21 @@ newComment() {
         .then(alertEl => alertEl.present());
   }
 
-  verifyLike() {
-    this.auth.user.pipe(take(1)).subscribe(user => {
-      this.user = user;
-      this.liked = this.post.favoriters.some(id => {
-        return id === user.id;
-      });
+  verifyLikeAndOwnership() {
+    this.userSub = this.auth.user.subscribe(user => {
+      if (user) {
+        this.user = user;
+        this.liked = this.post.favoriters.some(id => {
+          return id === user.id;
+        });
+        this.owner = user.id === this.post.user._id;
+      } else {
+      }
     });
   }
 
   likeHandler() {
     let urlAction: string;
-    console.log(this.user.token);
     if (this.liked) {
       urlAction = `${this.serverUrl}/tweets/${this.post._id}/favorites/unlike`;
     } else {
@@ -102,6 +113,51 @@ newComment() {
       this.postService.fetchPosts().pipe(take(1)).subscribe();
     }, error => {
       this.showAlert('Error', 'An error has occurred trying to like the post');
+    });
+  }
+
+  deletePostHandler() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${this.user.token}`
+      })
+    };
+    const body = new HttpParams()
+        .set('tweet', this.post._id);
+    this.http.delete<any>(`${this.serverUrl}/tweets/${this.post._id}`, httpOptions)
+        .subscribe(() => {
+          this.postService.fetchPosts().pipe(take(1)).subscribe();
+        }, error => {
+          this.showAlert('Error', 'An error has occurred while trying to delete the post');
+        });
+  }
+
+  sharePostHandler() {
+    this.actionSheetCtrl.create({
+      header: 'Share Post via...',
+      buttons: [{
+        text: 'WhatsApp',
+        icon: 'logo-whatsapp',
+        handler: () => { console.log('wip');}
+      },
+        {
+          text: 'Facebook',
+          icon: 'logo-facebook',
+          handler: () => { console.log('wip');}
+        },
+        {
+          text: 'Twitter',
+          icon: 'logo-twitter',
+          handler: () => { console.log('wip');}
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(actionSheetEl => {
+      actionSheetEl.present();
     });
   }
 

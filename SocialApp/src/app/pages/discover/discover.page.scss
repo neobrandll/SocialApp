@@ -1,4 +1,4 @@
-input{
+ion-input{
   border-color: transparent;
   box-shadow: transparent;
   border-radius: 10px;
@@ -7,7 +7,7 @@ input{
 
 }
 
-input::placeholder {
+ion-input::placeholder {
   color: var(--ion-color-primary, gray);
   padding-left: 5px;
 }

@@ -7,6 +7,7 @@ import {switchMap, take, tap} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Post} from '../../models/post.model';
 import {AuthService} from '../../pages/auth/auth.service';
+import {PostServiceService} from '../../services/post-service.service';
 
 
 

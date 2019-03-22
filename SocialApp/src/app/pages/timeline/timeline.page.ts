@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PostServiceService} from '../../services/post-service.service';
 import {LoadingController} from '@ionic/angular';
 import {Post} from '../../models/post.model';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.page.html',
   styleUrls: ['./timeline.page.scss'],
 })
-export class TimelinePage implements OnInit {
+export class TimelinePage implements OnInit, OnDestroy {
   isLoading = false;
   postArr: Post[];
+  postSub: Subscription;
   constructor(private postService: PostServiceService, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
@@ -22,7 +24,7 @@ export class TimelinePage implements OnInit {
         .then(loadingEl => {
           loadingEl.present();
           this.isLoading = true;
-          this.postService.fetchPosts().subscribe(posts => {
+         this.postSub = this.postService.fetchPosts().subscribe(posts => {
             this.isLoading = false;
             loadingEl.dismiss();
             this.postArr = posts;
@@ -33,5 +35,8 @@ export class TimelinePage implements OnInit {
   }
   newPostHandler() {
   this.postService.newPostModal();
+  }
+  ngOnDestroy(): void {
+      this.postSub.unsubscribe();
   }
 }

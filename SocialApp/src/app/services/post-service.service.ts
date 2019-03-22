@@ -48,8 +48,9 @@ export class PostServiceService  {
                     tuit.body));
             }
             return posts;
-        }), tap(posts => {
+        }), switchMap(posts => {
             this._posts.next(posts);
+            return this.post;
         }) );
     }
 
@@ -84,6 +85,7 @@ export class PostServiceService  {
                     }
                     this.post.pipe(take(1)).subscribe(posts => {
                        this._posts.next(posts.concat(newPost));
+                        this.fetchPosts().pipe(take(1)).subscribe();
                     });
             });
         });
