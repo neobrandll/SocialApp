@@ -11,7 +11,7 @@ import {User} from '../../models/user.model';
 import {AuthService} from '../../pages/auth/auth.service';
 import {PostServiceService} from '../../services/post-service.service';
 import {Subscription} from 'rxjs';
-import { Plugins } from '@capacitor/core';
+import { Plugins, ShareOptions } from '@capacitor/core';
 import {Router} from '@angular/router';
 const { Share } = Plugins;
 
@@ -22,6 +22,7 @@ const { Share } = Plugins;
 })
 
 export class PostComponent implements OnInit, OnDestroy {
+  shareObject: ShareOptions = {};
   @Input() post: Post;
   serverUrl: string;
   liked: boolean;
@@ -65,6 +66,7 @@ ngOnDestroy(): void {
           this.http.post<any>(`${this.serverUrl}/tweets/${this.post._id}/comments`, body.toString(), httpOptions)
               .subscribe(respData => {
                 if ( respData.msg === 'Comment added!') {
+                  this.postService.fetchPosts().pipe(take(1)).subscribe();
                     this.showAlert('Complete!', respData.msg);
                 }
               }, error => {
@@ -138,41 +140,22 @@ ngOnDestroy(): void {
   }
 
   sharePostHandler() {
-    this.actionSheetCtrl.create({
-      header: 'Share Post via...',
-      buttons: [{
-        text: 'WhatsApp',
-        icon: 'logo-whatsapp',
-        handler: () => { this.shareSocial();}
-      },
-        {
-          text: 'Facebook',
-          icon: 'logo-facebook',
-          handler: () => { console.log('wip');}
-        },
-        {
-          text: 'Twitter',
-          icon: 'logo-twitter',
-          handler: () => { console.log('wip');}
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        }
-      ]
-    }).then(actionSheetEl => {
-      actionSheetEl.present();
+    this.shareObject.title = 'test';
+    this.shareObject.text = 'test';
+    this.shareObject.url = 'test';
+    this.shareObject.dialogTitle = 'test';
+    this.shareSocial(this.shareObject);
+  }
+
+  async shareSocial(shareOptions: ShareOptions) {
+    await Share.share({
+      title: shareOptions.title,
+      text: shareOptions.text,
+      url: shareOptions.url,
+      dialogTitle: shareOptions.dialogTitle
     });
   }
 
-  async shareSocial() {
-    const shareRet = await Share.share({
-      title: 'See cool stuff',
-      text: 'Really awesome thing you need to see right meow',
-      url: 'http://ionicframework.com/',
-      dialogTitle: 'Share with buddies'
-    });
-  }
   goToProfile(userId: string) {
     this.router.navigate(['home', 'userProfile', userId]);
   }

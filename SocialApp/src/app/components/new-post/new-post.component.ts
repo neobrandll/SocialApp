@@ -8,6 +8,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Post} from '../../models/post.model';
 import {AuthService} from '../../pages/auth/auth.service';
 import {PostServiceService} from '../../services/post-service.service';
+import {of} from 'rxjs';
 
 
 
@@ -41,7 +42,8 @@ export class NewPostComponent implements OnInit {
                       postText: new FormControl(null, {
                           updateOn: 'change',
                           validators: [ Validators.required, Validators.minLength(1), Validators.maxLength(140)]
-                      })
+                      }),
+                      image: new FormControl(null)
                   });
                   this.isloading = false;
                   loadingEl.dismiss();
@@ -62,7 +64,14 @@ export class NewPostComponent implements OnInit {
       return;
     }
     const text = this.form.value.postText;
-    this.newPost(text).subscribe((data) => {
+    let imagePost;
+      if (this.form.get('image').value) {
+          imagePost = this.form.get('image').value;
+      } else {
+           imagePost = null;
+      }
+    this.newPost(text, imagePost).subscribe((data) => {
+        console.log(data);
       this.modalCtrl.dismiss({ post: data }, 'confirm');
     }, error => {
       console.log(error);
@@ -97,6 +106,44 @@ export class NewPostComponent implements OnInit {
         })
         .then(alertEl => alertEl.present());
   }
+
+    onImagePicked(imageData: string) {
+        let imageFile;
+            try {
+                const base64ContentArray = imageData.split(',');
+                const mimeType = base64ContentArray[0].match(/[^:\s*]\w+\/[\w-+\d.]+(?=[;| ])/)[0];
+                imageFile = this.base64toBlob(
+                    base64ContentArray[1],
+                    mimeType
+                );
+            } catch (error) {
+                console.log(error);
+                return;
+            }
+
+        this.form.patchValue({ image: imageFile });
+    }
+
+    base64toBlob(base64Data, contentType) {
+        contentType = contentType || '';
+        const sliceSize = 1024;
+        const byteCharacters = window.atob(base64Data);
+        const bytesLength = byteCharacters.length;
+        const slicesCount = Math.ceil(bytesLength / sliceSize);
+        const byteArrays = new Array(slicesCount);
+
+        for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+            const begin = sliceIndex * sliceSize;
+            const end = Math.min(begin + sliceSize, bytesLength);
+
+            const bytes = new Array(end - begin);
+            for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+                bytes[i] = byteCharacters[offset].charCodeAt(0);
+            }
+            byteArrays[sliceIndex] = new Uint8Array(bytes);
+        }
+        return new Blob(byteArrays, { type: contentType });
+    }
 
 
 }

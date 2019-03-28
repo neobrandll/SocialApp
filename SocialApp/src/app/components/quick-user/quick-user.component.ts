@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {User} from '../../models/user.model';
 import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-quick-user',
@@ -8,13 +8,15 @@ import {Router} from '@angular/router';
   styleUrls: ['./quick-user.component.scss'],
 })
 export class QuickUserComponent implements OnInit {
-  @Input() user: User;
+  @Input() user: any;
+  serverUrl: string;
   constructor(private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.serverUrl = environment.url;
+  }
 
   goToProfile() {
-
     this.router.navigate(['home', 'userProfile', this.user._id]);
   }
 }

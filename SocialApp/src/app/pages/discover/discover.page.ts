@@ -13,25 +13,31 @@ export class DiscoverPage implements OnInit {
   inputValue: string;
   serverUrl: string;
   userArray = [];
+  alreadySearched = false;
   constructor(private http: HttpClient, private auth: AuthService) { }
 
 
   searchHandler() {
-    console.log(this.inputValue);
-    this.auth.token.pipe(take(1)).subscribe(token =>{
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': `Bearer ${token}`
-        })
-      };
-      const body = new HttpParams()
-          .set('search', this.inputValue);
-      this.http.post<any>(`${this.serverUrl}/users/search`, body.toString(), httpOptions ).subscribe( userArr => {
-        this.userArray = userArr;
+    if (this.inputValue.trim() !== '') {
+      this.auth.token.pipe(take(1)).subscribe(token =>{
+        const httpOptions = {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${token}`
+          })
+        };
+        const body = new HttpParams()
+            .set('search', this.inputValue);
+        this.http.post<any>(`${this.serverUrl}/users/search`, body.toString(), httpOptions ).subscribe( userArr => {
+          this.userArray = userArr;
+          this.alreadySearched = true;
+        });
       });
-    });
+    } else {
+      this.userArray = [];
+    }
   }
+
   ngOnInit() {
     this.serverUrl = environment.url;
 
