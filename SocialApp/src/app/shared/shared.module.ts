@@ -8,6 +8,8 @@ import {UserProfileComponentID} from '../components/user-profile/user-profile.co
 import {CommentComponent} from '../components/comment/comment.component';
 import {QuickUserComponent} from '../components/quick-user/quick-user.component';
 import {ImagePickerComponent} from '../components/image-picker/image-picker.component';
+import {UserMenuInfoComponent} from '../components/user-menu-info/user-menu-info.component';
+
 
 
 
@@ -18,9 +20,16 @@ import {ImagePickerComponent} from '../components/image-picker/image-picker.comp
         , CommentComponent
         , QuickUserComponent
         , ImagePickerComponent
+        ,  UserMenuInfoComponent
     ],
     imports: [CommonModule, IonicModule, ReactiveFormsModule],
-    exports: [ PostComponent, NewCommentComponent, UserProfileComponentID, CommentComponent, QuickUserComponent, ImagePickerComponent],
+    exports: [ PostComponent
+        , NewCommentComponent
+        , UserProfileComponentID
+        , CommentComponent
+        , QuickUserComponent
+        , ImagePickerComponent
+        , UserMenuInfoComponent],
     entryComponents: [NewCommentComponent]
 })
 export class SharedModule {}

@@ -11,14 +11,13 @@ import { AppRoutingModule } from './app-routing.module';
 import {NewPostComponent} from './components/new-post/new-post.component';
 
 import {HttpClientModule} from '@angular/common/http';
-import {ProfilePageModule} from './pages/profile/profile.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from './shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent, NewPostComponent ],
   entryComponents: [NewPostComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ProfilePageModule, ReactiveFormsModule, SharedModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ReactiveFormsModule, SharedModule],
   providers: [
     StatusBar,
     SplashScreen,
