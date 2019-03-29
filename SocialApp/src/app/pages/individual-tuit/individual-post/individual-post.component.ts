@@ -1,29 +1,26 @@
-import {Component, OnInit, Input, OnDestroy} from '@angular/core';
-import {Post} from '../../models/post.model';
-import {environment} from '../../../environments/environment';
-import {NewPostComponent} from '../new-post/new-post.component';
-import {PostUserData} from '../../models/postUserData.model';
-import {take} from 'rxjs/operators';
-import {ActionSheetController, AlertController, ModalController} from '@ionic/angular';
-import {NewCommentComponent} from '../new-comment/new-comment.component';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {User} from '../../models/user.model';
-import {AuthService} from '../../pages/auth/auth.service';
-import {PostServiceService} from '../../services/post-service.service';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Share, ShareOptions} from '@capacitor/core';
+import {Post} from '../../../models/post.model';
+import {User} from '../../../models/user.model';
 import {Subscription} from 'rxjs';
-import { Plugins, ShareOptions } from '@capacitor/core';
+import {AuthService} from '../../auth/auth.service';
+import {ActionSheetController, AlertController, ModalController} from '@ionic/angular';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {PostServiceService} from '../../../services/post-service.service';
 import {Router} from '@angular/router';
-const { Share } = Plugins;
+import {environment} from '../../../../environments/environment';
+import {NewCommentComponent} from '../../../components/new-comment/new-comment.component';
+import {take} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-post',
-  templateUrl: './post.component.html',
-  styleUrls: ['./post.component.scss'],
+  selector: 'app-individual-post',
+  templateUrl: './individual-post.component.html',
+  styleUrls: ['./individual-post.component.scss'],
 })
-
-export class PostComponent implements OnInit, OnDestroy {
+export class IndividualPostComponent implements OnInit, OnDestroy {
   shareObject: ShareOptions = {};
   @Input() post: Post;
+  @Output() postEmitter = new EventEmitter<Post>();
   serverUrl: string;
   liked: boolean;
   owner: boolean;
@@ -39,47 +36,47 @@ export class PostComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-  this.serverUrl = environment.url;
+    this.serverUrl = environment.url;
     this.verifyLikeAndOwnership();
-}
-ngOnDestroy(): void {
+  }
+  ngOnDestroy(): void {
     this.userSub.unsubscribe();
-}
-
+  }
 
   newComment() {
-  this.modalCtrl.create({component: NewCommentComponent, componentProps: {post: this.post}})
-      .then(modalEl => {
-        modalEl.present();
-        return modalEl.onDidDismiss();
-      }).then(resultData => {
-        if (resultData.role === 'confirm') {
-          const body = new HttpParams()
-              .set('comment', resultData.data.comment)
-              .set('tweet', this.post._id);
-          const httpOptions = {
-            headers: new HttpHeaders({
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Authorization': `Bearer ${resultData.data.user._token}`
-            })
-          };
-          this.http.post<any>(`${this.serverUrl}/tweets/${this.post._id}/comments`, body.toString(), httpOptions)
-              .subscribe(respData => {
-                if ( respData.msg === 'Comment added!') {
-                  this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
-                    const newPost = posts.filter(post => post._id === this.post._id);
-                    this.post = newPost[0];
-                  });
-                    this.showAlert('Complete!', respData.msg);
-                }
-              }, error => {
-                this.showAlert('Error', 'An error has occurred trying to post the comment');
-              });
-        }
-  });
-}
+    this.modalCtrl.create({component: NewCommentComponent, componentProps: {post: this.post}})
+        .then(modalEl => {
+          modalEl.present();
+          return modalEl.onDidDismiss();
+        }).then(resultData => {
+      if (resultData.role === 'confirm') {
+        const body = new HttpParams()
+            .set('comment', resultData.data.comment)
+            .set('tweet', this.post._id);
+        const httpOptions = {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${resultData.data.user._token}`
+          })
+        };
+        this.http.post<any>(`${this.serverUrl}/tweets/${this.post._id}/comments`, body.toString(), httpOptions)
+            .subscribe(respData => {
+              if ( respData.msg === 'Comment added!') {
+                this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
+                  const newPost = posts.filter(post => post._id === this.post._id);
+                  this.post = newPost[0];
+                  this.postEmitter.emit(newPost[0]);
+                });
+                this.showAlert('Complete!', respData.msg);
+              }
+            }, error => {
+              this.showAlert('Error', 'An error has occurred trying to post the comment');
+            });
+      }
+    });
+  }
 
-   showAlert( header: string , message: string) {
+  showAlert( header: string , message: string) {
     this.alertCtrl
         .create({
           header: header,
@@ -122,6 +119,7 @@ ngOnDestroy(): void {
       this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
         const newPost = posts.filter(post => post._id === this.post._id);
         this.post = newPost[0];
+        this.postEmitter.emit(newPost[0]);
       });
     }, error => {
       this.showAlert('Error', 'An error has occurred trying to like the post');
@@ -140,6 +138,7 @@ ngOnDestroy(): void {
     this.http.delete<any>(`${this.serverUrl}/tweets/${this.post._id}`, httpOptions)
         .subscribe(() => {
           this.postService.fetchPosts().pipe(take(1)).subscribe();
+          this.router.navigate(['home']);
         }, error => {
           this.showAlert('Error', 'An error has occurred while trying to delete the post');
         });
@@ -164,10 +163,5 @@ ngOnDestroy(): void {
 
   goToProfile(userId: string) {
     this.router.navigate(['home', 'userProfile', userId]);
-  }
-
-  goIndividualTuit() {
-    this.postService.setIndividualPost(this.post);
-    this.router.navigate(['home', 'tweet']);
   }
 }

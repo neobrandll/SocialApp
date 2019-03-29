@@ -7,6 +7,7 @@ import {switchMap, take} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {UserProfile} from '../../models/userProfile.model';
+import {Post} from '../../models/post.model';
 
 interface UserResponse {
   user: {
@@ -71,6 +72,10 @@ export class UserProfilePage implements OnInit {
             , userResp.followingCount);
       });
     });
+  }
+
+  onPostDelete(post: Post) {
+    this.user.tweets = this.user.tweets.filter(tweet => tweet._id !== post._id);
   }
 
 }

@@ -63,4 +63,6 @@ export class AppComponent  {
       this.router.navigate(['home', 'userProfile', user.id]);
     });
   }
+
+
 }

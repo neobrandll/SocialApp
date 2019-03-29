@@ -7,7 +7,6 @@ const routes: Routes = [
   { path: 'discover', loadChildren: './pages/discover/discover.module#DiscoverPageModule', canLoad: [AuthGuard] },
   { path: 'home', loadChildren: './pages/home/home.module#HomePageModule', canLoad: [AuthGuard] },
   { path: 'auth', loadChildren: './pages/auth/auth.module#AuthPageModule' },
-  { path: 'edit-profile', loadChildren: './pages/profile/edit-profile/edit-profile.module#EditProfilePageModule' , canLoad: [AuthGuard]},
   { path: 'timeline', loadChildren: './pages/timeline/timeline.module#TimelinePageModule', canLoad: [AuthGuard] },
   { path: 'chat', loadChildren: './pages/chat/chat.module#ChatPageModule'},
   { path: 'new-chat', loadChildren: './pages/chat/new-chat/new-chat.module#NewChatPageModule' },

@@ -9,6 +9,8 @@ import {CommentComponent} from '../components/comment/comment.component';
 import {QuickUserComponent} from '../components/quick-user/quick-user.component';
 import {ImagePickerComponent} from '../components/image-picker/image-picker.component';
 import {UserMenuInfoComponent} from '../components/user-menu-info/user-menu-info.component';
+import {IndividualPostComponent} from '../pages/individual-tuit/individual-post/individual-post.component';
+import {UserPostComponent} from '../pages/user-profile/user-post/user-post.component';
 
 
 
@@ -21,6 +23,8 @@ import {UserMenuInfoComponent} from '../components/user-menu-info/user-menu-info
         , QuickUserComponent
         , ImagePickerComponent
         ,  UserMenuInfoComponent
+        , IndividualPostComponent
+        , UserPostComponent
     ],
     imports: [CommonModule, IonicModule, ReactiveFormsModule],
     exports: [ PostComponent
@@ -29,7 +33,9 @@ import {UserMenuInfoComponent} from '../components/user-menu-info/user-menu-info
         , CommentComponent
         , QuickUserComponent
         , ImagePickerComponent
-        , UserMenuInfoComponent],
+        , UserMenuInfoComponent
+        , IndividualPostComponent
+         , UserPostComponent],
     entryComponents: [NewCommentComponent]
 })
 export class SharedModule {}

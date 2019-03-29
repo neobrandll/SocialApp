@@ -3,6 +3,7 @@ import {AuthService} from '../../pages/auth/auth.service';
 import {User} from '../../models/user.model';
 import {Subscription} from 'rxjs';
 import {environment} from '../../../environments/environment';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-menu-info',
@@ -15,7 +16,7 @@ export class UserMenuInfoComponent implements OnInit, OnDestroy {
  userSub: Subscription;
  isAuth: boolean;
   serverUrl: string;
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
    this.userSub =  this.authService.user.subscribe(userdata => {
@@ -26,5 +27,9 @@ export class UserMenuInfoComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
   }
+
+    updateProfile() {
+        this.router.navigate(['home', 'edit']);
+    }
 
 }

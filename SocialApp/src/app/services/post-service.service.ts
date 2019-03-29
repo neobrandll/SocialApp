@@ -97,7 +97,7 @@ get individualPost() {
         return this._individualPost.asObservable();
 }
 
-  setIndividualPost(post: Post){
+  setIndividualPost(post: Post) {
         this._individualPost.next(post);
   }
 
