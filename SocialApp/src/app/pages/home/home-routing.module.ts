@@ -6,7 +6,7 @@ const routes: Routes = [
     {
         path: 'tabs',
         component: HomePage,
-        children:[
+        children: [
             {
                 path: 'discover',
                 loadChildren: '../discover/discover.module#DiscoverPageModule'
@@ -40,6 +40,10 @@ const routes: Routes = [
     {
         path: 'edit',
         loadChildren: '../edit-profile/edit-profile.module#EditProfilePageModule'
+    },
+    {
+        path: 'edit/updatePicture',
+        loadChildren: '../edit-profile/update-picture/update-picture.module#UpdatePicturePageModule'
     },
     {
         path: 'userProfile/:id',

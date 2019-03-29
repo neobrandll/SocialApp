@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Comment} from '../../models/comment.model';
 import {environment} from '../../../environments/environment';
 import {Router} from '@angular/router';
@@ -6,6 +6,8 @@ import {Subscription} from 'rxjs';
 import {AuthService} from '../../pages/auth/auth.service';
 import {User} from '../../models/user.model';
 import {CommentsService} from '../../services/comments.service';
+import {PostServiceService} from '../../services/post-service.service';
+import {Post} from '../../models/post.model';
 
 @Component({
   selector: 'app-comment',
@@ -14,12 +16,14 @@ import {CommentsService} from '../../services/comments.service';
 })
 export class CommentComponent implements OnInit, OnDestroy {
   @Input() comment: Comment;
-  @Input() postId: string;
+  @Input() post: Post;
+  @Output() postEmitter = new EventEmitter<Post>();
   serverUrl: string;
   userSub: Subscription;
   user: User;
   owner: boolean;
-  constructor(private router: Router, private auth: AuthService, private commentService: CommentsService) { }
+  constructor(private router: Router, private auth: AuthService, private commentService: CommentsService
+              , private postService: PostServiceService ) { }
 
   ngOnInit() {
     this.serverUrl = environment.url;
@@ -46,8 +50,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   onDeleteHandler() {
-  this.commentService.deleteComment(this.postId, this.comment._id).subscribe((data) => {
-    console.log(data);
+  this.commentService.deleteComment(this.post._id, this.comment._id).subscribe(() => {
+    this.postService.fetchPosts().subscribe();
+    this.post.comments = this.post.comments.filter(comment => comment._id !== this.comment._id);
+    this.postEmitter.emit(this.post);
+  }, error => {
+    console.log('An error has ocurred', error);
   });
 
   }

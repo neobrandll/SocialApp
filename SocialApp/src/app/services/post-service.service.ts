@@ -83,11 +83,11 @@ export class PostServiceService  {
                             tuit.image,
                             tuit.comments,
                             tuit.body);
+                        this.post.pipe(take(1)).subscribe(posts => {
+                            this._posts.next(posts.concat(newPost));
+                            this.fetchPosts().pipe(take(1)).subscribe();
+                        });
                     }
-                    this.post.pipe(take(1)).subscribe(posts => {
-                       this._posts.next(posts.concat(newPost));
-                        this.fetchPosts().pipe(take(1)).subscribe();
-                    });
             });
         });
   }

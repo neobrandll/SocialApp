@@ -9,7 +9,7 @@ export class Post {
     public favoriters: [],
     public favorites: [],
     public image: string,
-    public comments: [],
+    public comments: any[],
     public body: string
     ) {}
 }

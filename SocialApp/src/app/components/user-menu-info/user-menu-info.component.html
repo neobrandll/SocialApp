@@ -1,12 +1,12 @@
 <ion-grid no-padding *ngIf="user?.name">
   <ion-row style="height: 40%">
     <ion-col offset="1" size="5" >
-        <ion-avatar >
+        <ion-avatar [routerLink]="['/home/edit/updatePicture']">
           <ion-img  [src]=" user.profileImage !=='' ? serverUrl+ '/' + user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
         </ion-avatar >
     </ion-col>
     <ion-col size="6" justify-content-end>
-      <ion-button id="editBtn" fill="outline" size="small" (click)="updateProfile()">
+      <ion-button id="editBtn" fill="outline" size="small" [routerLink]="['/home/edit']">
         Edit profile
       </ion-button>
     </ion-col>

@@ -8,5 +8,5 @@
 
 <ion-content *ngIf="post">
   <app-individual-post (postEmitter)="newPost($event)" [post]="post" ></app-individual-post>
-  <app-comment *ngFor="let comment of post.comments "  [postId]="post._id" [comment]="comment"></app-comment>
+  <app-comment *ngFor="let comment of post.comments "  (postEmitter)="newPost($event)" [post]="post"  [comment]="comment"></app-comment>
 </ion-content>

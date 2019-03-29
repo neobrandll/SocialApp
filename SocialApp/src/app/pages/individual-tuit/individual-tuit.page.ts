@@ -26,7 +26,6 @@ post: Post;
     this.serverUrl = environment.url;
     this.postService.individualPost.pipe(take(1)).subscribe(post => {
           this.post = post;
-          console.log(post);
         }
     );
   }

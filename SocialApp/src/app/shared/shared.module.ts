@@ -11,6 +11,7 @@ import {ImagePickerComponent} from '../components/image-picker/image-picker.comp
 import {UserMenuInfoComponent} from '../components/user-menu-info/user-menu-info.component';
 import {IndividualPostComponent} from '../pages/individual-tuit/individual-post/individual-post.component';
 import {UserPostComponent} from '../pages/user-profile/user-post/user-post.component';
+import {RouterModule} from '@angular/router';
 
 
 
@@ -26,7 +27,7 @@ import {UserPostComponent} from '../pages/user-profile/user-post/user-post.compo
         , IndividualPostComponent
         , UserPostComponent
     ],
-    imports: [CommonModule, IonicModule, ReactiveFormsModule],
+    imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
     exports: [ PostComponent
         , NewCommentComponent
         , UserProfileComponentID

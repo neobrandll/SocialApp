@@ -28,8 +28,4 @@ export class UserMenuInfoComponent implements OnInit, OnDestroy {
     this.userSub.unsubscribe();
   }
 
-    updateProfile() {
-        this.router.navigate(['home', 'edit']);
-    }
-
 }
