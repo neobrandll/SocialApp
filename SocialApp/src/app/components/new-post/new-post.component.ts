@@ -73,7 +73,6 @@ export class NewPostComponent implements OnInit {
            imagePost = null;
       }
     this.newPost(text, imagePost).subscribe((data) => {
-        console.log(data);
       this.modalCtrl.dismiss({ post: data }, 'confirm');
     }, error => {
       console.log(error);
@@ -99,15 +98,6 @@ export class NewPostComponent implements OnInit {
 
 
 
-  private showAlert( header: string , message: string) {
-    this.alertCtrl
-        .create({
-          header: header,
-          message: message,
-          buttons: ['okay']
-        })
-        .then(alertEl => alertEl.present());
-  }
 
     onImagePicked(imageData: string) {
        this.imageService.handleImage(imageData).pipe(take(1)).subscribe(imageFile => {

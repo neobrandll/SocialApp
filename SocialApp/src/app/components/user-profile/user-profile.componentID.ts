@@ -4,6 +4,8 @@ import {UserProfile} from '../../models/userProfile.model';
 import {environment} from '../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AlertController} from '@ionic/angular';
+import {LikesSubscriptionsService} from '../../services/likes-subscriptions.service';
+import {AuthService} from '../../pages/auth/auth.service';
 
 @Component({
   selector: 'app-user-profileID',
@@ -18,7 +20,9 @@ export class UserProfileComponentID implements OnInit {
   user: User;
   serverUrl: string;
   constructor(private http: HttpClient
-              , private alertCtrl: AlertController) { }
+              , private alertCtrl: AlertController
+              , private  likesNsubs: LikesSubscriptionsService
+              , private  auth: AuthService) { }
 
   ngOnInit() {
     this.serverUrl = environment.url;
@@ -30,36 +34,21 @@ export class UserProfileComponentID implements OnInit {
   }
 
   subscriptionHandler() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${this.myUser.token}`
-      })
-    };
-    if (this.following) {
-      this.http.delete<any>(`${this.serverUrl}/users/${this.user.id}/follow`, httpOptions).subscribe(() => {
+    this.likesNsubs.subscriptionHandler(this.user.id, this.following).subscribe(() => {
+      if (this.following) {
         this.following = !this.following;
         this.userData.followerCount--;
-      }, error => {
-        this.showAlert('Error', error);
-      });
-    } else {
-      this.http.post<any>(`${this.serverUrl}/users/${this.user.id}/follow`, null , httpOptions).subscribe(() => {
+        this.myUser.following = this.myUser.following.filter(usersId => usersId !== this.user.id);
+        this.auth.updateUser(this.myUser);
+      } else {
         this.following = !this.following;
         this.userData.followerCount++;
-      }, error => {
-        this.showAlert('Error', error);
-      });
-    }
+        this.myUser.following = this.myUser.following.concat(this.user.id);
+        this.auth.updateUser(this.myUser);
+      }
+    });
   }
 
-  showAlert( header: string , message: string) {
-    this.alertCtrl
-        .create({
-          header: header,
-          message: message,
-          buttons: ['Okay']
-        })
-        .then(alertEl => alertEl.present());
-  }
+
 
 }
