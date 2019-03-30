@@ -13,9 +13,10 @@ const routes: Routes = [
   { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
   { path: 'edit-profile', loadChildren: './pages/edit-profile/edit-profile.module#EditProfilePageModule' },
   { path: 'user-profile', loadChildren: './pages/user-profile/user-profile.module#UserProfilePageModule' },
-  { path: 'individual-tuit', loadChildren: './pages/individual-tuit/individual-tuit.module#IndividualTuitPageModule' },  { path: 'update-picture', loadChildren: './pages/edit-profile/update-picture/update-picture.module#UpdatePicturePageModule' },
-  { path: 'following-page', loadChildren: './pages/following-page/following-page.module#FollowingPagePageModule' },
-  { path: 'followers-page', loadChildren: './pages/followers-page/followers-page.module#FollowersPagePageModule' }
+  { path: 'individual-tuit', loadChildren: './pages/individual-tuit/individual-tuit.module#IndividualTuitPageModule' },
+  { path: 'update-picture', loadChildren: './pages/edit-profile/update-picture/update-picture.module#UpdatePicturePageModule' },
+  { path: 'follows', loadChildren: './pages/follows/follows.module#FollowsPageModule' }
+
 
 ];
 

@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{followType}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="height: 100%; width: 100%" *ngIf="followsResponse?.followers.length>0">
+    <app-quick-user *ngFor="let user of followsResponse.followers" [user]="user"></app-quick-user>
+  </div>
+  <ion-text *ngIf="followsResponse?.followers.length<=0" id="noUsers">0 {{followType}}</ion-text>
+
+</ion-content>

@@ -1,5 +1,5 @@
 <ion-item>
-  <ion-grid (click)="goToProfile()">
+  <ion-grid >
     <ion-row>
       <ion-col  size="3" >
         <ion-avatar >
@@ -8,7 +8,7 @@
       </ion-col>
       <ion-col size="9" >
         <ion-grid>
-          <ion-row>
+          <ion-row [routerLink]="['/home/userProfile', this.user._id]">
             <ion-col size="6" style="padding-right: 5px">
               <ion-label>
                 @{{user.username}}
@@ -21,10 +21,10 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="6">
+            <ion-col size="6" [routerLink]="['/home/users', user._id, 'followers']">
               Followers: {{user.followers.length}}
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="6" [routerLink]="['/home/users', user._id, 'following']">
               Following: {{user.following.length}}
             </ion-col>
           </ion-row>

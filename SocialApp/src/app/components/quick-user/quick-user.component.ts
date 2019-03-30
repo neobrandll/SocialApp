@@ -16,8 +16,5 @@ export class QuickUserComponent implements OnInit {
     this.serverUrl = environment.url;
   }
 
-  goToProfile() {
-    this.router.navigate(['home', 'userProfile', this.user._id]);
-  }
 }
 
