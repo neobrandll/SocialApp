@@ -28,7 +28,7 @@ export class NewPostComponent implements OnInit {
               private auth: AuthService,
               private http: HttpClient,
               private loadingCtrl: LoadingController,
-              private imageService: ImageServiceService
+              private imageService: ImageServiceService,
   ) { }
 
   ngOnInit() {
@@ -78,7 +78,6 @@ export class NewPostComponent implements OnInit {
       console.log(error);
     });
   }
-
 
   newPost(text: string, image?: any) {
     const formData = new FormData();

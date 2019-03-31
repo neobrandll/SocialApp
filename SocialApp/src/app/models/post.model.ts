@@ -6,8 +6,8 @@ export class Post {
     public user: PostUserData,
     public _id: string,
     public createdAt: string,
-    public favoriters: [],
-    public favorites: [],
+    public favoriters: any[],
+    public favorites: any[],
     public image: string,
     public comments: any[],
     public body: string

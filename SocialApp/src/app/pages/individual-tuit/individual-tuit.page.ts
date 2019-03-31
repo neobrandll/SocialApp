@@ -22,12 +22,18 @@ post: Post;
               private http: HttpClient
   ) { }
 
-  ngOnInit() {
-    this.serverUrl = environment.url;
+  ionViewWillEnter() {
     this.postService.individualPost.pipe(take(1)).subscribe(post => {
           this.post = post;
         }
     );
+  }
+  ngOnInit() {
+    this.serverUrl = environment.url;
+    // this.postService.individualPost.pipe(take(1)).subscribe(post => {
+    //       this.post = post;
+    //     }
+    // );
   }
 
   newPost(post: Post) {

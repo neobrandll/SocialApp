@@ -11,6 +11,9 @@ import {Router} from '@angular/router';
 import {environment} from '../../../../environments/environment';
 import {NewCommentComponent} from '../../../components/new-comment/new-comment.component';
 import {take} from 'rxjs/operators';
+import {CommentsService} from '../../../services/comments.service';
+import {SimpleAlertService} from '../../../services/simple-alert.service';
+import {LikesSubscriptionsService} from '../../../services/likes-subscriptions.service';
 
 @Component({
   selector: 'app-user-post',
@@ -32,7 +35,10 @@ export class UserPostComponent implements OnInit, OnDestroy {
               private alertCtrl: AlertController,
               private postService: PostServiceService,
               private actionSheetCtrl: ActionSheetController,
-              private router: Router
+              private router: Router,
+              private commentsService: CommentsService,
+              private alertService: SimpleAlertService,
+              private likesNsubs: LikesSubscriptionsService
   ) { }
 
   ngOnInit() {
@@ -46,34 +52,15 @@ export class UserPostComponent implements OnInit, OnDestroy {
 
 
   newComment() {
-    this.modalCtrl.create({component: NewCommentComponent, componentProps: {post: this.post}})
-        .then(modalEl => {
-          modalEl.present();
-          return modalEl.onDidDismiss();
-        }).then(resultData => {
-      if (resultData.role === 'confirm') {
-        const body = new HttpParams()
-            .set('comment', resultData.data.comment)
-            .set('tweet', this.post._id);
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Bearer ${resultData.data.user._token}`
-          })
-        };
-        this.http.post<any>(`${this.serverUrl}/tweets/${this.post._id}/comments`, body.toString(), httpOptions)
-            .subscribe(respData => {
-              if ( respData.msg === 'Comment added!') {
-                this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
-                  const newPost = posts.filter(post => post._id === this.post._id);
-                  this.post = newPost[0];
-                });
-                this.showAlert('Complete!', respData.msg);
-              }
-            }, error => {
-              this.showAlert('Error', 'An error has occurred trying to post the comment');
-            });
+    this.commentsService.newComment(this.post).pipe(take(1)).subscribe(respData => {
+      if ( respData.msg === 'Comment added!') {
+        this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
+          const newPost = posts.filter(post => post._id === this.post._id);
+          this.post = newPost[0];
+        });
       }
+    }, error => {
+      this.alertService.showAlert('Error', 'An error has occurred trying to post the comment');
     });
   }
 
@@ -101,46 +88,21 @@ export class UserPostComponent implements OnInit, OnDestroy {
   }
 
   likeHandler() {
-    let urlAction: string;
-    if (this.liked) {
-      urlAction = `${this.serverUrl}/tweets/${this.post._id}/favorites/unlike`;
-    } else {
-      urlAction = `${this.serverUrl}/tweets/${this.post._id}/favorites`;
-    }
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${this.user.token}`
-      })
-    };
-    const body = new HttpParams()
-        .set('tweet', this.post._id);
-    this.http.post<any>(urlAction, body.toString(), httpOptions).subscribe(() => {
-      this.liked = !this.liked;
-      this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
-        const newPost = posts.filter(post => post._id === this.post._id);
-        this.post = newPost[0];
-      });
-    }, error => {
-      this.showAlert('Error', 'An error has occurred trying to like the post');
+    this.likesNsubs.likeHandler(this.post._id, this.liked).pipe(take(1)).subscribe(liked => {
+      if (liked) {
+        this.post.favoritesCount++;
+        this.post.favoriters.push(this.user.id);
+      } else {
+        this.post.favoritesCount--;
+        this.post.favoriters = this.post.favoriters.filter(id => id !== this.user.id);
+      }
+      this.liked = liked;
     });
   }
 
   deletePostHandler() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${this.user.token}`
-      })
-    };
-    const body = new HttpParams()
-        .set('tweet', this.post._id);
-    this.http.delete<any>(`${this.serverUrl}/tweets/${this.post._id}`, httpOptions)
-        .subscribe(() => {
+    this.postService.deletePostHandler(this.post._id).subscribe(() => {
           this.postDelEmitter.emit(this.post);
-          this.postService.fetchPosts().pipe(take(1)).subscribe();
-        }, error => {
-          this.showAlert('Error', 'An error has occurred while trying to delete the post');
         });
   }
 

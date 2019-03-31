@@ -13,6 +13,9 @@ import {PostServiceService} from '../../services/post-service.service';
 import {Subscription} from 'rxjs';
 import { Plugins, ShareOptions } from '@capacitor/core';
 import {Router} from '@angular/router';
+import {CommentsService} from '../../services/comments.service';
+import {SimpleAlertService} from '../../services/simple-alert.service';
+import {LikesSubscriptionsService} from '../../services/likes-subscriptions.service';
 const { Share } = Plugins;
 
 @Component({
@@ -32,10 +35,12 @@ export class PostComponent implements OnInit, OnDestroy {
   constructor(private auth: AuthService,
               private modalCtrl: ModalController,
               private http: HttpClient,
-              private alertCtrl: AlertController,
               private postService: PostServiceService,
               private actionSheetCtrl: ActionSheetController,
-              private router: Router
+              private router: Router,
+              private commentsService: CommentsService,
+              private alertService: SimpleAlertService,
+              private likesNsubs: LikesSubscriptionsService
   ) { }
 
   ngOnInit() {
@@ -48,46 +53,18 @@ ngOnDestroy(): void {
 
 
   newComment() {
-  this.modalCtrl.create({component: NewCommentComponent, componentProps: {post: this.post}})
-      .then(modalEl => {
-        modalEl.present();
-        return modalEl.onDidDismiss();
-      }).then(resultData => {
-        if (resultData.role === 'confirm') {
-          const body = new HttpParams()
-              .set('comment', resultData.data.comment)
-              .set('tweet', this.post._id);
-          const httpOptions = {
-            headers: new HttpHeaders({
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Authorization': `Bearer ${resultData.data.user._token}`
-            })
-          };
-          this.http.post<any>(`${this.serverUrl}/tweets/${this.post._id}/comments`, body.toString(), httpOptions)
-              .subscribe(respData => {
-                if ( respData.msg === 'Comment added!') {
-                  this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
-                    const newPost = posts.filter(post => post._id === this.post._id);
-                    this.post = newPost[0];
-                  });
-                    this.showAlert('Complete!', respData.msg);
-                }
-              }, error => {
-                this.showAlert('Error', 'An error has occurred trying to post the comment');
-              });
-        }
-  });
+    this.commentsService.newComment(this.post).pipe(take(1)).subscribe(respData => {
+      if ( respData.msg === 'Comment added!') {
+        this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
+          const newPost = posts.filter(post => post._id === this.post._id);
+          this.post = newPost[0];
+        });
+      }
+    }, error => {
+      this.alertService.showAlert('Error', 'An error has occurred trying to post the comment');
+    });
 }
 
-   showAlert( header: string , message: string) {
-    this.alertCtrl
-        .create({
-          header: header,
-          message: message,
-          buttons: ['Okay']
-        })
-        .then(alertEl => alertEl.present());
-  }
 
   verifyLikeAndOwnership() {
     this.userSub = this.auth.user.subscribe(user => {
@@ -103,46 +80,20 @@ ngOnDestroy(): void {
   }
 
   likeHandler() {
-    let urlAction: string;
-    if (this.liked) {
-      urlAction = `${this.serverUrl}/tweets/${this.post._id}/favorites/unlike`;
-    } else {
-      urlAction = `${this.serverUrl}/tweets/${this.post._id}/favorites`;
-    }
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${this.user.token}`
-      })
-    };
-    const body = new HttpParams()
-        .set('tweet', this.post._id);
-    this.http.post<any>(urlAction, body.toString(), httpOptions).subscribe(() => {
-      this.liked = !this.liked;
-      this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
-        const newPost = posts.filter(post => post._id === this.post._id);
-        this.post = newPost[0];
-      });
-    }, error => {
-      this.showAlert('Error', 'An error has occurred trying to like the post');
+    this.likesNsubs.likeHandler(this.post._id, this.liked).pipe(take(1)).subscribe(liked => {
+      if (liked) {
+        this.post.favoritesCount++;
+        this.post.favoriters.push(this.user.id);
+      } else {
+        this.post.favoritesCount--;
+        this.post.favoriters = this.post.favoriters.filter(id => id !== this.user.id);
+      }
+      this.liked = liked;
     });
   }
 
   deletePostHandler() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${this.user.token}`
-      })
-    };
-    const body = new HttpParams()
-        .set('tweet', this.post._id);
-    this.http.delete<any>(`${this.serverUrl}/tweets/${this.post._id}`, httpOptions)
-        .subscribe(() => {
-          this.postService.fetchPosts().pipe(take(1)).subscribe();
-        }, error => {
-          this.showAlert('Error', 'An error has occurred while trying to delete the post');
-        });
+    this.postService.deletePostHandler(this.post._id).subscribe();
   }
 
   sharePostHandler() {

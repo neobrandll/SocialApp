@@ -7,11 +7,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
+<ion-content>
+  <div *ngIf="postArr?.length>0" style="height: 100%; width: 100%">
   <app-post *ngFor="let post of postArr" [post]="post"></app-post>
+  </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="newPostHandler()">
       <ion-icon style="color: #ffffff " name="create"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+
+

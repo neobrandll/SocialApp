@@ -3,11 +3,12 @@ import {AlertController, ModalController} from '@ionic/angular';
 import {NewPostComponent} from '../components/new-post/new-post.component';
 import {BehaviorSubject} from 'rxjs';
 import {Post} from '../models/post.model';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, switchMap, take, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {AuthService} from '../pages/auth/auth.service';
 import {PostUserData} from '../models/postUserData.model';
+import {SimpleAlertService} from './simple-alert.service';
 
 
 
@@ -58,7 +59,8 @@ export class PostServiceService  {
   constructor(private modalCtrl: ModalController,
               private http: HttpClient,
               private alertCtrl: AlertController,
-              private auth: AuthService
+              private auth: AuthService,
+              private alert: SimpleAlertService
   ) { }
 
   newPostModal() {
@@ -101,6 +103,22 @@ get individualPost() {
         this._individualPost.next(post);
   }
 
-
-
+    deletePostHandler(postId: string) {
+       return this.auth.token.pipe(take(1), switchMap(token => {
+           const httpOptions = {
+               headers: new HttpHeaders({
+                   'Content-Type': 'application/x-www-form-urlencoded',
+                   'Authorization': `Bearer ${token}`
+               })
+           };
+           const body = new HttpParams()
+               .set('tweet', postId);
+           return this.http.delete<any>(`${this.url}/tweets/${postId}`, httpOptions).pipe(tap(() => {
+               this.fetchPosts().pipe(take(1)).subscribe();
+           }, error => {
+               this.alert.showAlert('Error', 'An error has occurred while trying to delete the post');
+           }));
+       }));
+    }
 }
+
