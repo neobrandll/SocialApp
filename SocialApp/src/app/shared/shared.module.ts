@@ -12,6 +12,7 @@ import {UserMenuInfoComponent} from '../components/user-menu-info/user-menu-info
 import {IndividualPostComponent} from '../pages/individual-tuit/individual-post/individual-post.component';
 import {UserPostComponent} from '../pages/user-profile/user-post/user-post.component';
 import {RouterModule} from '@angular/router';
+import {CustomDatePipe} from '../pipes/custom-date.pipe';
 
 
 
@@ -26,6 +27,7 @@ import {RouterModule} from '@angular/router';
         ,  UserMenuInfoComponent
         , IndividualPostComponent
         , UserPostComponent
+        , CustomDatePipe
     ],
     imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
     exports: [ PostComponent
@@ -36,7 +38,9 @@ import {RouterModule} from '@angular/router';
         , ImagePickerComponent
         , UserMenuInfoComponent
         , IndividualPostComponent
-         , UserPostComponent],
+        , UserPostComponent
+        , CustomDatePipe
+    ],
     entryComponents: [NewCommentComponent]
 })
 export class SharedModule {}

@@ -32,6 +32,7 @@ export class PostComponent implements OnInit, OnDestroy {
   owner: boolean;
   user: User;
   userSub: Subscription;
+  createdDate: Date;
   constructor(private auth: AuthService,
               private modalCtrl: ModalController,
               private http: HttpClient,
@@ -46,6 +47,8 @@ export class PostComponent implements OnInit, OnDestroy {
   ngOnInit() {
   this.serverUrl = environment.url;
     this.verifyLikeAndOwnership();
+    this.createdDate = new Date(this.post.createdAt);
+
 }
 ngOnDestroy(): void {
     this.userSub.unsubscribe();

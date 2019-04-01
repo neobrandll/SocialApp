@@ -29,6 +29,7 @@ export class IndividualPostComponent implements OnInit, OnDestroy {
   owner: boolean;
   user: User;
   userSub: Subscription;
+  createdDate: Date;
   constructor(private auth: AuthService,
               private modalCtrl: ModalController,
               private http: HttpClient,
@@ -44,6 +45,7 @@ export class IndividualPostComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.serverUrl = environment.url;
     this.verifyLikeAndOwnership();
+    this.createdDate = new Date(this.post.createdAt);
   }
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
@@ -60,16 +62,6 @@ export class IndividualPostComponent implements OnInit, OnDestroy {
     }, error => {
       this.alertService.showAlert('Error', 'An error has occurred trying to post the comment');
     });
-  }
-
-  showAlert( header: string , message: string) {
-    this.alertCtrl
-        .create({
-          header: header,
-          message: message,
-          buttons: ['Okay']
-        })
-        .then(alertEl => alertEl.present());
   }
 
   verifyLikeAndOwnership() {

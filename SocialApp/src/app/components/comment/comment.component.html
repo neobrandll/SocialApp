@@ -28,6 +28,14 @@
           Delete
         </ion-button>
       </ion-col>
+      <ion-col no-padding class="colDate">
+          <ion-label  class="dateLabel">{{createdDate | customDate}}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!owner">
+      <ion-col no-padding class="colDate">
+          <ion-label  class="dateLabel">{{createdDate | customDate}}</ion-label>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-item>

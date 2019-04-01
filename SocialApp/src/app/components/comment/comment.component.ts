@@ -22,12 +22,14 @@ export class CommentComponent implements OnInit, OnDestroy {
   userSub: Subscription;
   user: User;
   owner: boolean;
+  createdDate: Date;
   constructor(private router: Router, private auth: AuthService, private commentService: CommentsService
               , private postService: PostServiceService ) { }
 
   ngOnInit() {
     this.serverUrl = environment.url;
     this.verifyOwnership();
+    this.createdDate = new Date(this.comment.createdAt);
   }
 
   ngOnDestroy(): void {

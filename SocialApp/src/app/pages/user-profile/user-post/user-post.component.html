@@ -26,28 +26,35 @@
       <ion-img [src]="serverUrl + '/' + post.image"></ion-img>
     </ion-col>
   </ion-row>
-  <ion-row>
-    <ion-col [size]="owner ? 2 : 3" offset="2">
+  <ion-row no-padding>
+    <ion-col [size]="owner ? 2 : 3" offset="2" no-padding>
       <ion-button fill="clear" (click)="newComment()">
         <ion-icon name="text" size="small"></ion-icon>
         <ion-label>{{post.comments.length}}</ion-label>
       </ion-button>
     </ion-col>
-    <ion-col [size]="owner ? 2 : 3">
+    <ion-col [size]="owner ? 2 : 3" no-padding>
       <ion-button fill="clear" (click)="likeHandler()">
         <ion-icon [name]=" liked ? 'heart' : 'heart-empty'" size="small"></ion-icon>
         <ion-label>{{post.favoritesCount}}</ion-label>
       </ion-button>
     </ion-col>
-    <ion-col [size]="owner ? 2 : 3">
+    <ion-col [size]="owner ? 2 : 3" no-padding>
       <ion-button fill="clear" (click)="sharePostHandler()">
         <ion-icon name="share" size="small"></ion-icon>
       </ion-button>
     </ion-col>
-    <ion-col size="2" *ngIf="owner">
+    <ion-col size="2" *ngIf="owner" no-padding>
       <ion-button fill="clear" (click)="deletePostHandler()">
         <ion-icon name="trash" size="small"></ion-icon>
       </ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row no-padding>
+    <ion-col no-padding>
+      <div class="dateContainer">
+        <ion-label  class="dateLabel">{{createdDate | customDate}}</ion-label>
+      </div>
     </ion-col>
   </ion-row>
 </ion-grid>

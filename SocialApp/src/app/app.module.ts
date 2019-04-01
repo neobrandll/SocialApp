@@ -14,8 +14,9 @@ import {HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from './shared/shared.module';
 
+
 @NgModule({
-  declarations: [AppComponent, NewPostComponent ],
+  declarations: [AppComponent, NewPostComponent],
   entryComponents: [NewPostComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ReactiveFormsModule, SharedModule],
   providers: [
