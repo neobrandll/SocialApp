@@ -14,7 +14,7 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-item lines="none" (click)="goIndividualTuit()">
+          <ion-item lines="none" [routerLink]="['/home/tweet',post.user._id, post._id]">
             <ion-textarea disabled no-padding rows="6" [value]="post.body" ></ion-textarea>
           </ion-item>
         </ion-row>

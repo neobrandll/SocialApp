@@ -50,7 +50,7 @@ const routes: Routes = [
         loadChildren: '../user-profile/user-profile.module#UserProfilePageModule'
     },
     {
-        path: 'tweet',
+        path: 'tweet/:userId/:postId',
         loadChildren: '../individual-tuit/individual-tuit.module#IndividualTuitPageModule'
     },
     {

@@ -7,7 +7,7 @@ import {AuthService} from '../../auth/auth.service';
 import {ActionSheetController, AlertController, ModalController} from '@ionic/angular';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {PostServiceService} from '../../../services/post-service.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {environment} from '../../../../environments/environment';
 import {NewCommentComponent} from '../../../components/new-comment/new-comment.component';
 import {take} from 'rxjs/operators';
@@ -39,7 +39,8 @@ export class IndividualPostComponent implements OnInit, OnDestroy {
               private router: Router,
               private commentsService: CommentsService,
               private alertService: SimpleAlertService,
-              private likesNsubs: LikesSubscriptionsService
+              private likesNsubs: LikesSubscriptionsService,
+              private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -57,6 +58,7 @@ export class IndividualPostComponent implements OnInit, OnDestroy {
         this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
           const newPost = posts.filter(post => post._id === this.post._id);
           this.post = newPost[0];
+          this.postEmitter.emit(this.post);
         });
       }
     }, error => {
@@ -98,21 +100,21 @@ export class IndividualPostComponent implements OnInit, OnDestroy {
   }
 
   sharePostHandler() {
-    this.shareObject.title = 'test';
-    this.shareObject.text = 'test';
-    this.shareObject.url = 'test';
-    this.shareObject.dialogTitle = 'test';
-    this.shareSocial(this.shareObject);
+    this.shareObject.title = `test`;
+    this.shareObject.text = `Check out @${this.post.user.username}'s Post:`;
+    this.shareObject.url = `${this.serverUrl}'/home/tweet/'${this.post.user._id}'/'${this.post._id}`;
+    this.shareObject.dialogTitle = 'Share the post!';
+    this.postService.shareSocial(this.shareObject);
   }
 
-  async shareSocial(shareOptions: ShareOptions) {
-    await Share.share({
-      title: shareOptions.title,
-      text: shareOptions.text,
-      url: shareOptions.url,
-      dialogTitle: shareOptions.dialogTitle
-    });
-  }
+  // async shareSocial(shareOptions: ShareOptions) {
+  //   await Share.share({
+  //     title: shareOptions.title,
+  //     text: shareOptions.text,
+  //     url: shareOptions.url,
+  //     dialogTitle: shareOptions.dialogTitle
+  //   });
+  // }
 
   goToProfile(userId: string) {
     this.router.navigate(['home', 'userProfile', userId]);

@@ -9,6 +9,10 @@ import {environment} from '../../environments/environment';
 import {AuthService} from '../pages/auth/auth.service';
 import {PostUserData} from '../models/postUserData.model';
 import {SimpleAlertService} from './simple-alert.service';
+import {UserResponse} from '../models/Follows-response.model';
+import {UserProfile} from '../models/userProfile.model';
+import { Plugins, ShareOptions } from '@capacitor/core';
+const { Share } = Plugins;
 
 
 
@@ -95,13 +99,22 @@ export class PostServiceService  {
   }
 
 
-get individualPost() {
-        return this._individualPost.asObservable();
+ individualPost(userId: string, postId: string) {
+        return this.auth.token.pipe(take(1), switchMap(token => {
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Authorization': `Bearer ${token}`
+                })
+            };
+            const actionUrl = `${this.url}/users/${userId}`;
+            return this.http.get<UserProfile>(actionUrl, httpOptions);
+        }), map(response => {
+            return response.tweets.filter(tuit => tuit._id === postId);
+        }));
+
 }
 
-  setIndividualPost(post: Post) {
-        this._individualPost.next(post);
-  }
+
 
     deletePostHandler(postId: string) {
        return this.auth.token.pipe(take(1), switchMap(token => {
@@ -120,5 +133,16 @@ get individualPost() {
            }));
        }));
     }
+
+
+    async shareSocial(shareOptions: ShareOptions) {
+        await Share.share({
+            title: shareOptions.title,
+            text: shareOptions.text,
+            url: shareOptions.url,
+            dialogTitle: shareOptions.dialogTitle
+        });
+    }
+
 }
 

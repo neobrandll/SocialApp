@@ -16,24 +16,28 @@ import {take} from 'rxjs/operators';
 export class IndividualTuitPage implements OnInit{
 serverUrl: string;
 post: Post;
+postId: string;
+postOwnerId: string;
 
   constructor(private postService: PostServiceService,
               private auth: AuthService,
-              private http: HttpClient
+              private http: HttpClient,
+              private route: ActivatedRoute
   ) { }
 
-  ionViewWillEnter() {
-    this.postService.individualPost.pipe(take(1)).subscribe(post => {
-          this.post = post;
-        }
-    );
-  }
   ngOnInit() {
     this.serverUrl = environment.url;
     // this.postService.individualPost.pipe(take(1)).subscribe(post => {
     //       this.post = post;
     //     }
     // );
+    this.route.paramMap.subscribe(paramMap => {
+      this.postOwnerId = paramMap.get('userId');
+      this.postId = paramMap.get('postId');
+      this.postService.individualPost(this.postOwnerId, this.postId).subscribe( post => {
+        this.post = post[0];
+      });
+    });
   }
 
   newPost(post: Post) {
