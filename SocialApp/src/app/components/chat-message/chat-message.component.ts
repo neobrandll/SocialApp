@@ -12,15 +12,12 @@ export class ChatMessageComponent implements OnInit {
   @Input() message: ChatMessage;
   @Input() mailedUser: UserProfile;
   serverUrl: string;
-  isFromMailedUser = false;
+  isFromMailedUser: boolean;
   constructor() { }
 
   ngOnInit() {
     this.serverUrl = environment.url;
-    if (this.message.sentBy === this.mailedUser.user._id){
-      this.isFromMailedUser = true;
-    }
-    console.log(this.isFromMailedUser, this.message.message);
+    this.isFromMailedUser = (this.message.sentBy === this.mailedUser.user._id);
   }
 
 }

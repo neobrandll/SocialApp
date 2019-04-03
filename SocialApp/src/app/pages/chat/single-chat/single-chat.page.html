@@ -9,12 +9,16 @@
 
 <ion-content>
 
+  <ion-list *ngIf="chat">
+    <app-chat-message *ngFor="let item of messagesArr"  [message]="item" [mailedUser]="mailedUser" ></app-chat-message>
+  </ion-list>
 
-      <ion-virtual-scroll [items]="messagesArr" *ngIf="chat" >
-        <div *virtualItem="let item">
-         <app-chat-message  [message]="item" [mailedUser]="mailedUser" ></app-chat-message>
-        </div>
-      </ion-virtual-scroll>
+
+      <!--<ion-virtual-scroll [items]="messagesArr" *ngIf="chat" >-->
+        <!--<div *virtualItem="let item">-->
+         <!--<app-chat-message  [message]="item" [mailedUser]="mailedUser" ></app-chat-message>-->
+        <!--</div>-->
+      <!--</ion-virtual-scroll>-->
 
 
 </ion-content>

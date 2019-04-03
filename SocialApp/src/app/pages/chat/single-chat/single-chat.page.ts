@@ -42,6 +42,7 @@ messagesArr: ChatMessage[];
       return;
     }
     this.chatService.sendMsg(this.mailedUserId.trim(), this.messageValue).subscribe(responseData => {
+      this.messageValue = '';
       this.chat = responseData;
       this.messagesArr = this.chat.chat.messages;
     });

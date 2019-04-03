@@ -1,3 +1,5 @@
+import {UserProfileUser} from './userProfile.model';
+
 export interface ChatPostResponse {
     chat: {
         user1: string;
@@ -14,4 +16,16 @@ export interface ChatMessage {
     _id: string;
     sentAt: string;
     message: string;
+}
+
+export interface Chats {
+    _id: string;
+    user1: UserProfileUser;
+    user2: string;
+    createdAt: string;
+    messages: ChatMessage[];
+}
+
+export interface ChatsArray {
+    chats: Chats[];
 }

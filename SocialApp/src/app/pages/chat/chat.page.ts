@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {ChatService} from '../../services/chat.service';
+import {Chats} from '../../models/chat.model';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -6,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
+chats: Chats[];
+  constructor(private chatService: ChatService) { }
 
-  constructor() { }
-
+  ionViewWillEnter() {
+    this.chatService.loadChatsArray() .subscribe( chatsResponse => {
+      this.chats = chatsResponse.chats;
+      console.log(this.chats);
+    }, error1 => {
+      console.log(error1);
+    });
+  }
   ngOnInit() {
   }
 

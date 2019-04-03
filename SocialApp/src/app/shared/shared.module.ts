@@ -16,6 +16,7 @@ import {CustomDatePipe} from '../pipes/custom-date.pipe';
 import {ChatSearchUserComponent} from '../components/chat-search-user/chat-search-user.component';
 import {ChatMessage} from '../models/chat.model';
 import {ChatMessageComponent} from '../components/chat-message/chat-message.component';
+import {PreviewChatComponent} from '../components/preview-chat/preview-chat.component';
 
 
 
@@ -33,6 +34,7 @@ import {ChatMessageComponent} from '../components/chat-message/chat-message.comp
         , CustomDatePipe
         , ChatSearchUserComponent
         , ChatMessageComponent
+        , PreviewChatComponent
     ],
     imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
     exports: [ PostComponent
@@ -47,6 +49,7 @@ import {ChatMessageComponent} from '../components/chat-message/chat-message.comp
         , CustomDatePipe
         , ChatSearchUserComponent
         , ChatMessageComponent
+        , PreviewChatComponent
     ],
     entryComponents: [NewCommentComponent]
 })
