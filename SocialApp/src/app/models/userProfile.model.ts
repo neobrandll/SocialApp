@@ -1,8 +1,17 @@
-import {User} from './user.model';
+export interface UserProfileUser {
+    _id: string;
+    name: string;
+    username: string;
+    provider: string;
+    email: string;
+    following: string[];
+    followers: string[];
+    profileImage: string;
+}
 
 export class UserProfile {
     constructor(
-        public user: User,
+        public user: UserProfileUser,
     public tweets: any[],
     public tweetCount: number,
     public followerCount: number,

@@ -2,7 +2,7 @@
   <ion-grid no-padding>
     <ion-row>
       <ion-col size="3">
-        <ion-avatar (click)="goToProfile(comment.user._id)">
+        <ion-avatar [routerLink]="['/home', 'userProfile', comment.user._id]">
           <ion-img  [src]=" comment.user.profileImage !=='' ? serverUrl+ '/' + comment.user.profileImage  : '../../../assets/imgs/nopic.png' "  ></ion-img>
         </ion-avatar>
       </ion-col>

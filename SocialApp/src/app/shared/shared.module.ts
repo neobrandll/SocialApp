@@ -13,6 +13,9 @@ import {IndividualPostComponent} from '../pages/individual-tuit/individual-post/
 import {UserPostComponent} from '../pages/user-profile/user-post/user-post.component';
 import {RouterModule} from '@angular/router';
 import {CustomDatePipe} from '../pipes/custom-date.pipe';
+import {ChatSearchUserComponent} from '../components/chat-search-user/chat-search-user.component';
+import {ChatMessage} from '../models/chat.model';
+import {ChatMessageComponent} from '../components/chat-message/chat-message.component';
 
 
 
@@ -28,6 +31,8 @@ import {CustomDatePipe} from '../pipes/custom-date.pipe';
         , IndividualPostComponent
         , UserPostComponent
         , CustomDatePipe
+        , ChatSearchUserComponent
+        , ChatMessageComponent
     ],
     imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
     exports: [ PostComponent
@@ -40,6 +45,8 @@ import {CustomDatePipe} from '../pipes/custom-date.pipe';
         , IndividualPostComponent
         , UserPostComponent
         , CustomDatePipe
+        , ChatSearchUserComponent
+        , ChatMessageComponent
     ],
     entryComponents: [NewCommentComponent]
 })

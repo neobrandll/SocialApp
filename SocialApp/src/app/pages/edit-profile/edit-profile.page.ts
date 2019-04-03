@@ -7,6 +7,7 @@ import {User} from '../../models/user.model';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {environment} from '../../../environments/environment';
+import {PostServiceService} from '../../services/post-service.service';
 
 interface UserData {
     user: {
@@ -37,7 +38,8 @@ export class EditProfilePage implements OnInit {
               private http: HttpClient,
               private router: Router,
               private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController
+              private alertCtrl: AlertController,
+              private postService: PostServiceService
               ) { }
 
 
@@ -98,6 +100,7 @@ export class EditProfilePage implements OnInit {
                       , updateResp.user.following
                       , updateResp.user.profileImage);
                   this.auth.updateUser(updatedUser);
+                  this.postService.fetchPosts().pipe(take(1)).subscribe();
                   this.showAlert('Success!', 'Update Complete!');
               });
       });

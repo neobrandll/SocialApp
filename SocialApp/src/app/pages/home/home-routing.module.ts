@@ -26,6 +26,10 @@ const routes: Routes = [
                     {
                         path: 'new-chat',
                         loadChildren: '../chat/new-chat/new-chat.module#NewChatPageModule'
+                    },
+                    {
+                        path: ':mailedUser',
+                        loadChildren: '../chat/single-chat/single-chat.module#SingleChatPageModule'
                     }
                 ]
 

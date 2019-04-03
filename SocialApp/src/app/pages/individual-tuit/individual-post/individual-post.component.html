@@ -2,7 +2,7 @@
 <ion-grid id="mainGrid" >
   <ion-row>
     <ion-col size="3">
-      <ion-avatar (click)="goToProfile(post.user._id)">
+      <ion-avatar [routerLink]="['/home', 'userProfile', post.user._id]">
         <ion-img  [src]=" post.user.profileImage !=='' ? serverUrl+ '/' + post.user.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
       </ion-avatar>
     </ion-col>

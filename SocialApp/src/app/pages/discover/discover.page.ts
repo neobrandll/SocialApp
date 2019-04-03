@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {AuthService} from '../auth/auth.service';
 import {take} from 'rxjs/operators';
+import {DiscoverService} from '../../services/discover.service';
 
 @Component({
   selector: 'app-discover',
@@ -14,25 +15,17 @@ export class DiscoverPage implements OnInit {
   serverUrl: string;
   userArray = [];
   alreadySearched = false;
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private auth: AuthService,
+              private discoverService: DiscoverService) { }
 
 
   searchHandler() {
-    if (this.inputValue.trim() !== '') {
-      this.auth.token.pipe(take(1)).subscribe(token =>{
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Bearer ${token}`
-          })
-        };
-        const body = new HttpParams()
-            .set('search', this.inputValue);
-        this.http.post<any>(`${this.serverUrl}/users/search`, body.toString(), httpOptions ).subscribe( userArr => {
+    const searchValue = this.inputValue.trim();
+    if (searchValue !== '') {
+        this.discoverService.searchUser(searchValue).subscribe( userArr => {
           this.userArray = userArr;
           this.alreadySearched = true;
         });
-      });
     } else {
       this.userArray = [];
     }

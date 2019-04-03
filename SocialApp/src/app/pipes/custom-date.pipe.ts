@@ -11,6 +11,9 @@ export class CustomDatePipe extends DatePipe implements PipeTransform {
     const currentDate = new Date().getTime() / 1000;
     let resultTime = currentDate - inputDate;
     if (resultTime < 60) {
+      if (resultTime < 0) {
+        resultTime = 0;
+      }
       return `Today ${Math.round(resultTime)}seg ago `;
     } else {
       resultTime = resultTime / 60;

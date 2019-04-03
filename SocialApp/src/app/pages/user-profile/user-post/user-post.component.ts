@@ -113,19 +113,7 @@ export class UserPostComponent implements OnInit, OnDestroy {
     this.shareObject.text = 'test';
     this.shareObject.url = 'test';
     this.shareObject.dialogTitle = 'test';
-    this.shareSocial(this.shareObject);
+    this.postService.shareSocial(this.shareObject);
   }
 
-  async shareSocial(shareOptions: ShareOptions) {
-    await Share.share({
-      title: shareOptions.title,
-      text: shareOptions.text,
-      url: shareOptions.url,
-      dialogTitle: shareOptions.dialogTitle
-    });
-  }
-
-  goToProfile(userId: string) {
-    this.router.navigate(['home', 'userProfile', userId]);
-  }
 }

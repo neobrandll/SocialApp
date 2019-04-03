@@ -38,10 +38,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToProfile(userId: string) {
-    this.router.navigate(['home', 'userProfile', userId]);
-  }
-
   verifyOwnership() {
     this.userSub = this.auth.user.subscribe(user => {
       if (user) {
