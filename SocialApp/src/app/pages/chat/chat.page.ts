@@ -15,7 +15,6 @@ chats: Chats[];
   ionViewWillEnter() {
     this.chatService.loadChatsArray() .subscribe( chatsResponse => {
       this.chats = chatsResponse.chats;
-      console.log(this.chats);
     }, error1 => {
       console.log(error1);
     });

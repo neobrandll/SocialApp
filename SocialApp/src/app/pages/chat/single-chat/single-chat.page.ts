@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ChatService} from '../../../services/chat.service';
 import {UserProfile} from '../../../models/userProfile.model';
 import {ChatMessage, ChatPostResponse} from '../../../models/chat.model';
+import {TimeInterval} from 'rxjs';
 
 @Component({
   selector: 'app-single-chat',
@@ -10,31 +11,36 @@ import {ChatMessage, ChatPostResponse} from '../../../models/chat.model';
   styleUrls: ['./single-chat.page.scss'],
 })
 export class SingleChatPage implements OnInit {
-mailedUserId: string;
-mailedUser: UserProfile;
-messageValue: string;
-chat: ChatPostResponse;
-messagesArr: ChatMessage[];
 
   constructor(private route: ActivatedRoute,
               private chatService: ChatService) { }
+mailedUserId: string;
+mailedUser: UserProfile;
+messageValue: string;
+interval;
+chat: ChatPostResponse;
+messagesArr: ChatMessage[];
+
+
 
   ngOnInit() {
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.route.paramMap.subscribe(paramMap => {
       this.mailedUserId = paramMap.get('mailedUser');
       this.chatService.mailedUser(this.mailedUserId).subscribe(user => {
         this.mailedUser = user;
       });
-      this.chatService.loadChat(this.mailedUserId).subscribe(chatResponse => {
-        if (chatResponse.chat !== null) {
-          this.chat = chatResponse;
-          this.messagesArr = this.chat.chat.messages;
-        }
-      });
+      this.loadMsgs();
+      this.interval = setInterval(() => {
+        this.loadMsgs();
+      }, 2000);
     });
+  }
+
+  ionViewWillLeave() {
+    clearInterval(this.interval);
   }
 
   sendMsg() {
@@ -47,5 +53,14 @@ messagesArr: ChatMessage[];
       this.messagesArr = this.chat.chat.messages;
     });
   }
+
+  loadMsgs() {
+    this.chatService.loadChat(this.mailedUserId).subscribe(chatResponse => {
+      if (chatResponse.chat !== null) {
+        this.chat = chatResponse;
+        this.messagesArr = this.chat.chat.messages;
+      }
+    });
+    }
 
 }

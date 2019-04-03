@@ -58,14 +58,18 @@ export class UserProfilePage implements OnInit {
         };
         return this.http.get<UserResponse>(`${this.serverUrl}/users/${paramMap.get('id')}`, httpOptions);
       })).subscribe(userResp => {
-        this.user = new UserProfile(new User(null
-            , userResp.user._id
-            , userResp.user.email
-            , userResp.user.name
-            , userResp.user.username
-            , userResp.user.followers
-            , userResp.user.following
-            , userResp.user.profileImage)
+        const userUser = {
+          _id: userResp.user._id,
+        name: userResp.user.name,
+        username: userResp.user.username,
+        provider: 'local',
+        email: userResp.user.email,
+        following: userResp.user.following,
+        followers: userResp.user.followers,
+        profileImage: userResp.user.profileImage};
+
+        this.user = new UserProfile(
+            userUser
             , userResp.tweets
             , userResp.tweetCount
             , userResp.followerCount

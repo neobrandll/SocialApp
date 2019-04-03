@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {User} from '../../models/user.model';
-import {UserProfile} from '../../models/userProfile.model';
+import {UserProfile, UserProfileUser} from '../../models/userProfile.model';
 import {environment} from '../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AlertController} from '@ionic/angular';
@@ -17,7 +17,7 @@ export class UserProfileComponentID implements OnInit {
   @Input() myUser: User;
   owner: boolean;
   following: boolean;
-  user: User;
+  user: UserProfileUser;
   serverUrl: string;
   constructor(private http: HttpClient
               , private alertCtrl: AlertController
@@ -27,23 +27,23 @@ export class UserProfileComponentID implements OnInit {
   ngOnInit() {
     this.serverUrl = environment.url;
     this.user = this.userData.user;
-    this.owner = this.myUser.id === this.user.id;
+    this.owner = this.myUser.id === this.user._id;
     this.following = this.userData.user.followers.some(id => {
       return id === this.myUser.id;
     });
   }
 
   subscriptionHandler() {
-    this.likesNsubs.subscriptionHandler(this.user.id, this.following).subscribe(() => {
+    this.likesNsubs.subscriptionHandler(this.user._id, this.following).subscribe(() => {
       if (this.following) {
         this.following = !this.following;
         this.userData.followerCount--;
-        this.myUser.following = this.myUser.following.filter(usersId => usersId !== this.user.id);
+        this.myUser.following = this.myUser.following.filter(usersId => usersId !== this.user._id);
         this.auth.updateUser(this.myUser);
       } else {
         this.following = !this.following;
         this.userData.followerCount++;
-        this.myUser.following = this.myUser.following.concat(this.user.id);
+        this.myUser.following = this.myUser.following.concat(this.user._id);
         this.auth.updateUser(this.myUser);
       }
     });
