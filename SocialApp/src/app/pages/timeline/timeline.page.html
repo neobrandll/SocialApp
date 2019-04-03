@@ -8,6 +8,11 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+            refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="postArr?.length>0" style="height: 100%; width: 100%">
   <app-post *ngFor="let post of postArr" [post]="post"></app-post>
   </div>

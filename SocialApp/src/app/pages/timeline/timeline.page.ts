@@ -19,19 +19,7 @@ export class TimelinePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    this.loadingCtrl
-        .create({ keyboardClose: true, message: 'Loading posts...' })
-        .then(loadingEl => {
-          loadingEl.present();
-          this.isLoading = true;
-         this.postSub = this.postService.fetchPosts().subscribe(posts => {
-            this.isLoading = false;
-            loadingEl.dismiss();
-            this.postArr = posts;
-          }, () => {
-            loadingEl.dismiss();
-          });
-        });
+      this.loadPosts();
   }
   newPostHandler() {
   this.postService.newPostModal();
@@ -39,4 +27,30 @@ export class TimelinePage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
       this.postSub.unsubscribe();
   }
+
+    doRefresh(event) {
+        this.isLoading = true;
+        this.postSub = this.postService.fetchPosts().subscribe(posts => {
+            this.postArr = posts;
+            this.isLoading = false;
+            event.target.complete();
+        }, () => {
+        });
+    }
+
+    loadPosts() {
+        this.loadingCtrl
+            .create({ keyboardClose: true, message: 'Loading posts...' })
+            .then(loadingEl => {
+                loadingEl.present();
+                this.isLoading = true;
+                this.postSub = this.postService.fetchPosts().subscribe(posts => {
+                    this.isLoading = false;
+                    loadingEl.dismiss();
+                    this.postArr = posts;
+                }, () => {
+                    loadingEl.dismiss();
+                });
+            });
+    }
 }
