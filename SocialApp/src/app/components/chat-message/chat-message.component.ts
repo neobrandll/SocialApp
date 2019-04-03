@@ -13,11 +13,13 @@ export class ChatMessageComponent implements OnInit {
   @Input() mailedUser: UserProfile;
   serverUrl: string;
   isFromMailedUser: boolean;
+  sentAt: Date;
   constructor() { }
 
   ngOnInit() {
     this.serverUrl = environment.url;
     this.isFromMailedUser = (this.message.sentBy === this.mailedUser.user._id);
+    this.sentAt = new Date(this.message.sentAt);
   }
 
 }

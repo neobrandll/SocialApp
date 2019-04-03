@@ -28,11 +28,13 @@ export class PostComponent implements OnInit, OnDestroy {
   shareObject: ShareOptions = {};
   @Input() post: Post;
   serverUrl: string;
+  shareUrl = environment.shareUrl;
   liked: boolean;
   owner: boolean;
   user: User;
   userSub: Subscription;
   createdDate: Date;
+  commentsCount: number;
   constructor(private auth: AuthService,
               private modalCtrl: ModalController,
               private http: HttpClient,
@@ -48,6 +50,7 @@ export class PostComponent implements OnInit, OnDestroy {
   this.serverUrl = environment.url;
     this.verifyLikeAndOwnership();
     this.createdDate = new Date(this.post.createdAt);
+    this.commentsCount = this.post.comments.length;
 
 }
 ngOnDestroy(): void {
@@ -58,10 +61,11 @@ ngOnDestroy(): void {
   newComment() {
     this.commentsService.newComment(this.post).pipe(take(1)).subscribe(respData => {
       if ( respData.msg === 'Comment added!') {
-        this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
-          const newPost = posts.filter(post => post._id === this.post._id);
-          this.post = newPost[0];
-        });
+        this.commentsCount++;
+        // this.postService.fetchPosts().pipe(take(1)).subscribe(posts => {
+        //   const newPost = posts.filter(post => post._id === this.post._id);
+        //   this.post = newPost[0];
+        // });
       }
     }, error => {
       this.alertService.showAlert('Error', 'An error has occurred trying to post the comment');
@@ -100,10 +104,10 @@ ngOnDestroy(): void {
   }
 
   sharePostHandler() {
-    this.shareObject.title = 'test';
-    this.shareObject.text = 'test';
-    this.shareObject.url = 'test';
-    this.shareObject.dialogTitle = 'test';
+    this.shareObject.title = `test`;
+    this.shareObject.text = `Check out @${this.post.user.username}'s Post:`;
+    this.shareObject.url = `${this.shareUrl}/home/tweet/${this.post.user._id}/${this.post._id}`;
+    this.shareObject.dialogTitle = 'Share the post!';
     this.postService.shareSocial(this.shareObject);
   }
 

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  url: 'http://' + 'localhost:3000'
+  url: 'http://' + '192.168.1.7:3000',
+  shareUrl: 'http://' + '192.168.1.7:8100'
 };
 
 /*

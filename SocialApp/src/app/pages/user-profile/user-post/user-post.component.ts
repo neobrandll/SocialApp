@@ -25,6 +25,7 @@ export class UserPostComponent implements OnInit, OnDestroy {
   @Input() post: Post;
   @Output() postDelEmitter = new EventEmitter<Post>();
   serverUrl: string;
+  shareUrl = environment.shareUrl;
   liked: boolean;
   owner: boolean;
   user: User;
@@ -66,16 +67,6 @@ export class UserPostComponent implements OnInit, OnDestroy {
     });
   }
 
-  showAlert( header: string , message: string) {
-    this.alertCtrl
-        .create({
-          header: header,
-          message: message,
-          buttons: ['Okay']
-        })
-        .then(alertEl => alertEl.present());
-  }
-
   verifyLikeAndOwnership() {
     this.userSub = this.auth.user.subscribe(user => {
       if (user) {
@@ -109,10 +100,10 @@ export class UserPostComponent implements OnInit, OnDestroy {
   }
 
   sharePostHandler() {
-    this.shareObject.title = 'test';
-    this.shareObject.text = 'test';
-    this.shareObject.url = 'test';
-    this.shareObject.dialogTitle = 'test';
+    this.shareObject.title = `test`;
+    this.shareObject.text = `Check out @${this.post.user.username}'s Post:`;
+    this.shareObject.url = `${this.shareUrl}/home/tweet/${this.post.user._id}/${this.post._id}`;
+    this.shareObject.dialogTitle = 'Share the post!';
     this.postService.shareSocial(this.shareObject);
   }
 
