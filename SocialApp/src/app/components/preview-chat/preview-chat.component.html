@@ -2,7 +2,7 @@
   <ion-grid >
     <ion-row>
       <ion-col  size="3" >
-        <ion-avatar >
+        <ion-avatar [routerLink]="['/home/userProfile', chat.user1._id]">
           <ion-img  [src]=" chat.user1.profileImage !=='' ? serverUrl+ '/' + chat.user1.profileImage : '../../../assets/imgs/nopic.png' "  ></ion-img>
         </ion-avatar >
       </ion-col>

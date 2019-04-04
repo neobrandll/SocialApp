@@ -14,7 +14,7 @@ export class DiscoverService {
               private auth: AuthService) { }
 
   searchUser(inputValue: string) {
-      return this.auth.token.pipe(take(1), switchMap(token =>{
+      return this.auth.token.pipe(take(1), switchMap(token => {
         const httpOptions = {
           headers: new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded',

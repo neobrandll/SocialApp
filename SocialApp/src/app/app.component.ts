@@ -1,19 +1,20 @@
 import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { Plugins, Capacitor } from '@capacitor/core';
+import { Plugins, Capacitor, AppState } from '@capacitor/core';
 
 import {AuthService} from './pages/auth/auth.service';
 import {Router} from '@angular/router';
 import {User} from './models/user.model';
 import {Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
+const { App } = Plugins;
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent  {
+export class AppComponent  implements OnInit{
   private darkMode = false;
   user: User;
 
@@ -21,11 +22,22 @@ export class AppComponent  {
     private platform: Platform,
     private authService: AuthService,
     private router: Router,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
   ) {
     this.initializeApp();
   }
+  ngOnInit(): void {
+   this.url();
+  }
 
+  async url() {
+    const ret = await App.getLaunchUrl();
+    if (ret && ret.url) {
+      const urlAction = ret.url.replace('http://Tutatu', '');
+      this.router.navigateByUrl(urlAction);
+    }
+    console.log('Launch url: ', ret);
+  }
 
   initializeApp() {
     this.platform.ready().then(() => {

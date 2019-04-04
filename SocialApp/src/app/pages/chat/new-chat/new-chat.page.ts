@@ -4,6 +4,7 @@ import {AuthService} from '../../auth/auth.service';
 import {take} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {DiscoverService} from '../../../services/discover.service';
+import {User} from '../../../models/user.model';
 
 @Component({
   selector: 'app-new-chat',
@@ -15,6 +16,7 @@ export class NewChatPage implements OnInit {
   serverUrl: string;
   userArray = [];
   alreadySearched = false;
+  myUser: User;
   constructor(private http: HttpClient, private auth: AuthService,
               private discoverService: DiscoverService) { }
 
@@ -32,6 +34,9 @@ export class NewChatPage implements OnInit {
   }
 
   ngOnInit() {
+    this.auth.user.pipe(take(1)).subscribe(user => {
+      this.myUser = user;
+    });
     this.serverUrl = environment.url;
   }
 }

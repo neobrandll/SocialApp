@@ -41,6 +41,17 @@
                     android:port="8100"
                     android:pathPrefix="/home/tweet/" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="Tutatu"
+                    android:pathPrefix="/home/tweet/" />
+            </intent-filter>
 
         </activity>
 
