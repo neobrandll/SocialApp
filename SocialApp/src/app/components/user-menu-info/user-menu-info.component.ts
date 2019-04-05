@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../../pages/auth/auth.service';
 import {User} from '../../models/user.model';
 import {Subscription} from 'rxjs';
@@ -24,7 +24,9 @@ export class UserMenuInfoComponent implements OnInit, OnDestroy {
    });
     this.serverUrl = this.url;
   }
-  ngOnDestroy(): void {
+
+
+    ngOnDestroy(): void {
     this.userSub.unsubscribe();
   }
 
