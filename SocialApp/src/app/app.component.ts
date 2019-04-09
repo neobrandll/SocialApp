@@ -33,7 +33,7 @@ export class AppComponent  implements OnInit{
   async url() {
     const ret = await App.getLaunchUrl();
     if (ret && ret.url) {
-      const urlAction = ret.url.replace('http://Tutatu', '');
+      const urlAction = ret.url.replace('http://tutatu.ddns.net', '');
       this.router.navigateByUrl(urlAction);
     }
     console.log('Launch url: ', ret);

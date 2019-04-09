@@ -37,7 +37,7 @@
 
                 <data
                     android:scheme="http"
-                    android:host="192.168.1.7"
+                    android:host="tutatu.ddns.net"
                     android:port="8100"
                     android:pathPrefix="/home/tweet/" />
             </intent-filter>
@@ -49,8 +49,8 @@
 
                 <data
                     android:scheme="http"
-                    android:host="Tutatu"
-                    android:pathPrefix="/home/tweet/" />
+                    android:host="tutatu.ddns.net"
+                    android:pathPrefix="/home/tweet" />
             </intent-filter>
 
         </activity>

@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'http://' + '192.168.1.2:3000',
-  shareUrl: 'http://' + '192.168.1.7:8100'
+  url: 'http://' + 'tutatu.ddns.net:3000'
 };
 
 /*

@@ -25,7 +25,6 @@ export class UserPostComponent implements OnInit, OnDestroy {
   @Input() post: Post;
   @Output() postDelEmitter = new EventEmitter<Post>();
   serverUrl: string;
-  shareUrl = environment.shareUrl;
   liked: boolean;
   owner: boolean;
   user: User;
@@ -102,7 +101,7 @@ export class UserPostComponent implements OnInit, OnDestroy {
   sharePostHandler() {
     this.shareObject.title = `test`;
     this.shareObject.text = `Check out @${this.post.user.username}'s Post:`;
-    this.shareObject.url = `http://Tutatu/home/tweet/${this.post.user._id}/${this.post._id}`;
+    this.shareObject.url = `http://tutatu.ddns.net/home/tweet/${this.post.user._id}/${this.post._id}`;
     this.shareObject.dialogTitle = 'Share the post!';
     this.postService.shareSocial(this.shareObject);
   }

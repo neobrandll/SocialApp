@@ -28,7 +28,6 @@ export class PostComponent implements OnInit, OnDestroy {
   shareObject: ShareOptions = {};
   @Input() post: Post;
   serverUrl: string;
-  shareUrl = environment.shareUrl;
   liked: boolean;
   owner: boolean;
   user: User;
@@ -106,7 +105,7 @@ ngOnDestroy(): void {
   sharePostHandler() {
     this.shareObject.title = `test`;
     this.shareObject.text = `Check out @${this.post.user.username}'s Post:`;
-    this.shareObject.url = `http://Tutatu/home/tweet/${this.post.user._id}/${this.post._id}`;
+    this.shareObject.url = `http://tutatu.ddns.net/home/tweet/${this.post.user._id}/${this.post._id}`;
     this.shareObject.dialogTitle = 'Share the post!';
     this.postService.shareSocial(this.shareObject);
   }
